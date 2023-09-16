@@ -1,6 +1,6 @@
 asdfasdf
 conflict test
-123(from vs code)123
+123(from vs code AND github)123
 The quick brown fox jumped over the sleeping dogs
 
 conflict test
