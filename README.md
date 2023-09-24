@@ -8,7 +8,7 @@ Have you ever had too many small items on your plate and couldn't keep track of 
 
 ### Design
 
-![Mock](mock-draft.png)
+![Mock Draft](mock-draft.png)
 
 
 ### Key features
