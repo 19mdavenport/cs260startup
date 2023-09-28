@@ -1,53 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <!-- Tell browsers not to scale the viewport automatically -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Productivity Manager</title>
-    <link rel="icon" href="favicon.ico" />
-  </head>
-  <body>
-    <!-- Use header, main, and footer elements to give semantic structure -->
-    <header>
-      <h1>Productivity Manager</h1>
 
-      <!-- Navigation elements -->
-      <nav>
-        <!-- Menu is a semantic alternative to <ul> that represents an interaction -->
-        <menu>
-          <li><a href="./">Home</a></li>
-          <li><a href="./breaktime">Breaktime</a></li>
-          <li><a href="./about">About</a></li>
-          <li><a href="./settings">Settings</a></li>
-        </menu>
-      </nav>
+<head>
+  <meta charset="UTF-8" />
+  <!-- Tell browsers not to scale the viewport automatically -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Productivity Manager</title>
+  <link rel="icon" href="favicon.ico" />
+</head>
 
-      <!-- Since we don't have the ability to style we use old style HTML to give some visual formatting -->
-      <hr />
-    </header>
+<body>
+  <!-- Use header, main, and footer elements to give semantic structure -->
+  <header>
+    <img src="Logo.png" height="25" />
+    <h1>Productivity Manager</h1>
 
-    <main>
-      <h1>Welcome</h1>
-      <p>Login or Register:</p>
-      <form method="get" action="">
-        <label for="username">Username</label>
-        <input type="text" id="username" placeholder="username" />
-        <label for="password">Password</label>
-        <input type="text" id="password" placeholder="********" />
-        <label for="email">Email</label>
-        <input type="text" id="email" placeholder="email@email.com" />
-        <button type="submit">Login</button>
-      </form>
-      <p>New User?</p>
-      <button type="submit">Create New Account</button>
-    </main>
+    <!-- Navigation elements -->
+    <nav>
+      <!-- Menu is a semantic alternative to <ul> that represents an interaction -->
+      <menu>
 
-    <footer>
-      <hr />
-      <span class="text-reset">Michael Davenport</span>
-      <br />
-      <a href="https://github.com/19mdavenport/cs260startup">GitHub</a>
-    </footer>
-  </body>
+        <li><a href="./">Home</a></li>
+        <li><a href="./breaktime">Breaktime</a></li>
+        <li><a href="./about">About</a></li>
+        <li><a href="./settings">Settings</a></li>
+      </menu>
+    </nav>
+
+    <!-- Since we don't have the ability to style we use old style HTML to give some visual formatting -->
+    <hr />
+  </header>
+
+  <main>
+    <h1>Welcome</h1>
+    <p>Login or Register:</p>
+    <form method="get" action="">
+      <label for="username">Username</label>
+      <input type="text" id="username" placeholder="username" />
+      <label for="password">Password</label>
+      <input type="text" id="password" placeholder="********" />
+      <label for="email">Email</label>
+      <input type="text" id="email" placeholder="email@email.com" />
+      <button type="submit">Login</button>
+    </form>
+    <p>New User?</p>
+    <button type="submit">Create New Account</button>
+  </main>
+
+  <footer>
+    <hr />
+    <span class="text-reset">Michael Davenport</span>
+    <br />
+    <a href="https://github.com/19mdavenport/cs260startup">GitHub</a>
+  </footer>
+</body>
+
 </html>
