@@ -30,71 +30,24 @@
   </header>
 
   <main>
-    <div class="players">
-      Player:
-      <span class="player-name">Mystery player</span>
-    </div>
-    <ul class="notification">
-      <li class="player-name">Tim started a new game</li>
-      <li class="player-name">Ada started a new game</li>
-      <li class="player-name">Tim scored 337</li>
-    </ul>
-
-    <!-- More formatting with old style HTML -->
-    <br />
-
     <div>
-      <label for="count">Score</label>
-      <input type="text" id="count" value="--" readonly />
+      <form method="get" action="">
+        <label for="timer">How long would you like your break to be?</label>
+        <input type="number" id="timer" placeholder="10" />
+        <label for="timer">minutes</label>
+        <button type="submit">Start</button>
+      </form>
     </div>
-
-    <br />
-
     <div>
-      <button>Reset</button>
-    </div>
-
-    <br />
-
-    <div>
-      <table>
-        <tr>
-          <td>
-            <button>
-              <svg aria-hidden="true" viewBox="0 0 100 100" height="100" width="100">
-                <!-- SVG
-                    M move <to x,y>
-                    Q quadratic curve <control point x,y> <to x,y>
-                -->
-                <path d="M 95,5 95,95 5,95 Q 5,5 95,5" fill="green" />
-              </svg>
-            </button>
-          </td>
-          <td>
-            <button>
-              <svg aria-hidden="true" viewBox="0 0 100 100" height="100" width="100">
-                <path d="M5,5 5,95 95,95 Q 95,5 5,5" fill="red" />
-              </svg>
-            </button>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <button>
-              <svg aria-hidden="true" viewBox="0 0 100 100" height="100" width="100">
-                <path d="M5,5 95,5 95,95 Q 5,95 5,5" fill="blue" />
-              </svg>
-            </button>
-          </td>
-          <td>
-            <button>
-              <svg aria-hidden="true" viewBox="0 0 100 100" height="100" width="100">
-                <path d="M95,5 5,5 5,95 Q 95,95 95,5" fill="yellow" />
-              </svg>
-            </button>
-          </td>
-        </tr>
-      </table>
+      <menu>
+        <li>Stick Game</li>
+        <li>Cessna Flight Sim?</li>
+        <li>Game 3</li>
+      </menu>
+      <div id="game-window">
+        <iframe src="http://www.freeonlinegames.com/embed/158501" width="960" height="600" frameborder="no"
+          scrolling="no"></iframe>
+      </div>
     </div>
   </main>
 
