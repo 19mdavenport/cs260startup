@@ -37,3 +37,14 @@ I am going to use the required technologies in the following ways.
 - **Login** - Register and login users. Credentials securely stored in database. Can add sample tasks if not logged in, but tasks will not be stored in database unless authenticated
 - **WebSocket** - Multiplayer game(s) in break section
 - **React** - Application ported to use the React web framework.
+
+## HTML deliverable
+
+For this deliverable I built out the structure of my application using HTML.
+
+- **HTML pages** - Three HTML pages that represent the ability to login and view database content, take a break, and an about page.
+- **Links** - Each page has a header linking to other pages
+- **Images** - Logo, favicon, and a placeholder image on the about page
+- **Login** - Input box and submit button for login and register.
+- **Database** - The tasks and groups represent data pulled from the database.
+- **WebSocket** - Some of the games on the breaktime page will include websocket interactions
