@@ -10,7 +10,7 @@
   <link rel="icon" href="favicon.ico" />
 </head>
 
-<body class="bg-dark">
+<body class="bg-dark text-light">
   <!-- Use header, main, and footer elements to give semantic structure -->
   <header>
     <img src="Logo.png" height="25" />
@@ -21,9 +21,9 @@
       <!-- Menu is a semantic alternative to <ul> that represents an interaction -->
       <menu>
 
-        <li><a href="./">Home</a></li>
-        <li><a href="./breaktime">Breaktime</a></li>
-        <li><a href="./about">About</a></li>
+        <tr><a href="./">Home</a></tr>
+        <tr><a href="./breaktime">Breaktime</a></tr>
+        <tr><a href="./about">About</a></tr>
       </menu>
     </nav>
 
@@ -52,102 +52,122 @@
       <h1>Welcome, (username)</h1>
       <div>
         <h2>Due Soon</h2>
-        <menu>
-          <li>
-            <p>Startup HTML</p>
-            <p>[C S 260]</p>
-            <p>9/30/2023 11:59 PM</p>
-          </li>
-          <li>
-            <p style="font-weight: bold; text-decoration: underline;">Database Content</p>
-            <p>[Class Name]</p>
-            <p>Due Date</p>
-          </li>
-          <li>
-            <p>Item 3 </p>
-            <p>[Class Name]</p>
-            <p>Due Date</p>
-          </li>
-          <li>
-            <p>Item 4 </p>
-            <p>[Class Name]</p>
-            <p>Due Date</p>
-          </li>
-          <li>
-            <p>Item 5 </p>
-            <p>[Class Name]</p>
-            <p>Due Date</p>
-          </li>
-          <li>
-            <p>Item 6 </p>
-            <p>[Class Name]</p>
-            <p>Due Date</p>
-          </li>
-          <li>
-            <p>Item 7 </p>
-            <p>[Class Name]</p>
-            <p>Due Date</p>
-          </li>
-          <li>
-            <p>Item 8 </p>
-            <p>[Class Name]</p>
-            <p>Due Date</p>
-          </li>
-        </menu>
+        <table class="table table-dark table-bordered table-hover">
+          <thead>
+            <th>Assignment Name</th>
+            <th>Class</th>
+            <th>Due</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Startup HTML</td>
+              <td>[C S 260]</td>
+              <td>9/30/2023 11:59 PM</td>
+            </tr>
+            <tr>
+              <td>Item 2</td>
+              <td>[Class Name]</td>
+              <td>Due Date</td>
+            </tr>
+            <tr>
+              <td>Item 3 </td>
+              <td>[Class Name]</td>
+              <td>Due Date</td>
+            </tr>
+            <tr>
+              <td>Item 4 </td>
+              <td>[Class Name]</td>
+              <td>Due Date</td>
+            </tr>
+            <tr>
+              <td>Item 5 </td>
+              <td>[Class Name]</td>
+              <td>Due Date</td>
+            </tr>
+            <tr>
+              <td>Item 6 </td>
+              <td>[Class Name]</td>
+              <td>Due Date</td>
+            </tr>
+            <tr>
+              <td>Item 7 </td>
+              <td>[Class Name]</td>
+              <td>Due Date</td>
+            </tr>
+            <tr>
+              <td>Item 8 </td>
+              <td>[Class Name]</td>
+              <td>Due Date</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       <div>
         <h2>Large Projects</h2>
-        <menu>
-          <li>
-            <p>Startup HTML</p>
-            <p>[C S 260]</p>
-            <p># Hours Left</p>
-            <p>9/30/2023 11:59 PM</p>
-          </li>
-          <li>
-            <p>Item 2</p>
-            <p>[Class Name]</p>
-            <p># Hours Left</p>
-            <p>Due Date</p>
-          </li>
-          <li>
-            <p>Item 3</p>
-            <p>[Class Name]</p>
-            <p># Hours Left</p>
-            <p>Due Date</p>
-          </li>
-          <li>
-            <p>Item 4</p>
-            <p>[Class Name]</p>
-            <p># Hours Left</p>
-            <p>Due Date</p>
-          </li>
-          <li>
-            <p>Item 5</p>
-            <p>[Class Name]</p>
-            <p># Hours Left</p>
-            <p>Due Date</p>
-          </li>
-          <li>
-            <p>Item 6</p>
-            <p>[Class Name]</p>
-            <p># Hours Left</p>
-            <p>Due Date</p>
-          </li>
-        </menu>
+        <table class="table table-dark table-bordered table-hover">
+          <thead>
+            <th>Assignment Name</th>
+            <th>Class</th>
+            <th>Time Left</th>
+            <th>Due</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Startup CSS</td>
+              <td>C S 260</td>
+              <td>3 Hours</td>
+              <td>10/14/2023 11:59 PM</td>
+            </tr>
+            <tr>
+              <td>Item 2</td>
+              <td>[Class Name]</td>
+              <td># Hours</td>
+              <td>Due Date</td>
+            </tr>
+            <tr>
+              <td>Item 3</td>
+              <td>[Class Name]</td>
+              <td># Hours</td>
+              <td>Due Date</td>
+            </tr>
+            <tr>
+              <td>Item 4</td>
+              <td>[Class Name]</td>
+              <td># Hours</td>
+              <td>Due Date</td>
+            </tr>
+            <tr>
+              <td>Item 5</td>
+              <td>[Class Name]</td>
+              <td># Hours</td>
+              <td>Due Date</td>
+            </tr>
+            <tr>
+              <td>Item 6</td>
+              <td>[Class Name]</td>
+              <td># Hours</td>
+              <td>Due Date</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
     <div>
       <h2>Classes</h2>
-      <menu>
-        <li>C S 260</li>
-        <li>Class 2</li>
-        <li>Class 3</li>
-        <li>Class 4</li>
-        <li>Class 5</li>
-      </menu>
+      <table class="table table-dark table-bordered table-hover"> 
+        <thead>
+          <th>Class Name</th>
+        </thead>
+        <tbody>
+          <tr><td>C S 260</td></tr>
+          <tr><td>Class 2</td></tr>
+          <tr><td>Class 3</td></tr>
+          <tr><td>Class 4</td></tr>
+          <tr><td>Class 5</td></tr>
+        </tbody>
+      </table>
     </div>
 
   </main>
