@@ -9,6 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Productivity Manager</title>
   <link rel="icon" href="favicon.ico" />
+  <script type="text/javascript" defer>window.addEventListener("DOMContentLoaded", (event) => {const loginModal = new bootstrap.Modal('#login'); loginModal.show();})</script>
 </head>
 
 <body class="bg-dark text-light container">
@@ -19,7 +20,7 @@
           <img src="Logo.png" style="height: 25px;" />
           <span class="navbar-text">Productivity Manager</span>
         </a>
-        
+
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -39,11 +40,40 @@
       </div>
     </nav>
 
-    <!-- Since we don't have the ability to style we use old style HTML to give some visual formatting -->
     <hr />
   </header>
 
   <main>
+    <div class="modal show" id="login">
+      <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h4 class="modal-title">Welcome</h4>
+          </div>
+
+          <div class="modal-body">
+            <p>Login or Register:</p>
+            <form method="get" action="">
+              <label for="username">Username</label>
+              <input type="text" id="username" placeholder="username" />
+              <label for="password">Password</label>
+              <input type="text" id="password" placeholder="********" />
+              <label for="email">Email</label>
+              <input type="text" id="email" placeholder="email@email.com" />
+              <button type="submit">Login</button>
+            </form>
+            <p>New User?</p>
+            <button type="submit">Create New Account</button>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
     <div id="login">
       <h1>Welcome</h1>
       <p>Login or Register:</p>
@@ -59,6 +89,8 @@
       <p>New User?</p>
       <button type="submit">Create New Account</button>
     </div>
+
+
 
     <div id="content">
       <h1>Welcome, (username)</h1>
