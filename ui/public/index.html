@@ -9,7 +9,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Productivity Manager</title>
   <link rel="icon" href="favicon.ico" />
-  <script type="text/javascript" defer>window.addEventListener("DOMContentLoaded", (event) => {const loginModal = new bootstrap.Modal('#login'); loginModal.show();})</script>
+  <script type="text/javascript"
+    defer>window.addEventListener("DOMContentLoaded", (event) => { const loginModal = new bootstrap.Modal('#login'); loginModal.show(); })</script>
 </head>
 
 <body class="bg-dark text-light container">
@@ -35,6 +36,16 @@
             <li class="nav-item">
               <a class="nav-link" href="./about">About</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span>(username)</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                  class="bi bi-gear-fill" viewBox="0 0 16 16">
+                  <path
+                    d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z" />
+                </svg>
+              </a>
+            </li>
           </ul>
         </div>
       </div>
@@ -44,56 +55,78 @@
   </header>
 
   <main>
-    <div class="modal show" id="login">
+    <div class="modal" id="login">
       <div class="modal-dialog modal-fullscreen">
-        <div class="modal-content">
+        <div class="modal-content bg-dark">
+          <div class="container" style="max-width: 500px;">
 
-          <div class="modal-header">
-            <h4 class="modal-title">Welcome</h4>
+            <div class="modal-header">
+              <h4 class="modal-title">Welcome</h4>
+            </div>
+
+            <div class="modal-body">
+              <p>Login or Register:</p>
+              <form method="get" action="">
+                <div class="mb-3 mt-3">
+                  <label for="username" class="form_label">Username</label>
+                  <input type="text" class="form-control" id="username" placeholder="username" />
+                </div>
+                <div class="mb-3 mt-3">
+                  <label for="password" class="form_label">Password</label>
+                  <input type="text" class="form-control" id="password" placeholder="********" />
+                </div>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Login</button>
+              </form>
+              <hr />
+              <form method="get" action="" style="display: flex; align-items: center;">
+                <p style="margin: auto 14px auto 0;">New User?</p>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#register">Create New Account</button>
+              </form>
+            </div>
           </div>
-
-          <div class="modal-body">
-            <p>Login or Register:</p>
-            <form method="get" action="">
-              <label for="username">Username</label>
-              <input type="text" id="username" placeholder="username" />
-              <label for="password">Password</label>
-              <input type="text" id="password" placeholder="********" />
-              <label for="email">Email</label>
-              <input type="text" id="email" placeholder="email@email.com" />
-              <button type="submit">Login</button>
-            </form>
-            <p>New User?</p>
-            <button type="submit">Create New Account</button>
-          </div>
-
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-          </div>
-
         </div>
       </div>
     </div>
-    <div id="login">
-      <h1>Welcome</h1>
-      <p>Login or Register:</p>
-      <form method="get" action="">
-        <label for="username">Username</label>
-        <input type="text" id="username" placeholder="username" />
-        <label for="password">Password</label>
-        <input type="text" id="password" placeholder="********" />
-        <label for="email">Email</label>
-        <input type="text" id="email" placeholder="email@email.com" />
-        <button type="submit">Login</button>
-      </form>
-      <p>New User?</p>
-      <button type="submit">Create New Account</button>
+
+    <div class="modal" id="register">
+      <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content bg-dark">
+          <div class="container" style="max-width: 500px;">
+
+            <div class="modal-header">
+              <h4 class="modal-title">Welcome</h4>
+            </div>
+
+            <div class="modal-body">
+              <p>Login or Register:</p>
+              <form method="get" action="">
+                <div class="mb-3 mt-3">
+                  <label for="username" class="form_label">Username</label>
+                  <input type="text" class="form-control" id="username" placeholder="username" />
+                </div>
+                <div class="mb-3 mt-3">
+                  <label for="password" class="form_label">Password</label>
+                  <input type="text" class="form-control" id="password" placeholder="********" />
+                </div>
+                <div class="mb-3 mt-3">
+                  <label for="email" class="form_label">Email</label>
+                  <input type="text" class="form-control" id="email" placeholder="email@email.com" />
+                </div>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Register</button>
+              </form>
+              <hr />
+              <form method="get" action="" style="display: flex; align-items: center;">
+                <p style="margin: auto 14px auto 0;">Already have an account?</p>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#login">Login</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
 
-
     <div id="content">
-      <h1>Welcome, (username)</h1>
       <div>
         <h2>Due Soon</h2>
         <table class="table table-dark table-bordered table-hover">
@@ -103,7 +136,7 @@
             <th>Due</th>
           </thead>
           <tbody>
-            <tr>
+            <tr class="table-danger">
               <td>Startup HTML</td>
               <td>[C S 260]</td>
               <td>9/30/2023 11:59 PM</td>
@@ -157,7 +190,7 @@
             <th>Due</th>
           </thead>
           <tbody>
-            <tr>
+            <tr class="table-warning">
               <td>Startup CSS</td>
               <td>C S 260</td>
               <td>3 Hours</td>
@@ -226,11 +259,12 @@
 
   </main>
 
-  <footer>
+  <footer class="m-3">
     <hr />
-    <span class="text-reset">Michael Davenport</span>
-    <br />
-    <a href="https://github.com/19mdavenport/cs260startup">GitHub</a>
+    <div class="d-flex justify-content-between">
+      <span class="text-reset">Michael Davenport</span>
+      <a href="https://github.com/19mdavenport/cs260startup">GitHub</a>
+    </div>
   </footer>
 </body>
 
