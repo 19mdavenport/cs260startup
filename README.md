@@ -48,3 +48,12 @@ For this deliverable I built out the structure of my application using HTML.
 - **Login** - Input box and submit button for login and register.
 - **Database** - The tasks and groups represent data pulled from the database.
 - **WebSocket** - Some of the games on the breaktime page will include websocket interactions
+
+## CSS deliverable
+For this deliverable I styled the application into a form more resembling its final appearance (I will still need to edit many of these items for future parts)
+- **Header, footer, and main content body**
+- **Navigation elements** - Header is now in a styled bootstrap nav
+- **Responsive to window resizing** - My app looks (i hope reasonable) on all window sizes and devices
+- **Application elements** - Used (i hope good) contrast and whitespace
+- **Application text content** - Consistent fonts
+- **Application images** - Placeholder logo is styled into the navbar
