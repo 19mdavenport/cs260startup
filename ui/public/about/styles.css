@@ -1,0 +1,28 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    height: 100vh;
+  }
+  
+  header {
+    flex: 0 content;
+  }
+
+  main {
+    flex: 1;
+  }
+
+  main > div {
+    justify-content: center; 
+  }
+  
+  footer {
+    flex: 0 content;
+    padding: 1.5em 0;
+  }
+  
