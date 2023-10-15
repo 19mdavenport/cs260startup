@@ -3,68 +3,115 @@
 
 <head>
   <meta charset="UTF-8" />
+  <link rel="stylesheet" href="https://startup.mdaven.dev/custom_bootstrap.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <!-- Tell browsers not to scale the viewport automatically -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Break time</title>
   <link rel="icon" href="../favicon.ico" />
+  <script type="text/javascript"
+    defer>window.addEventListener("DOMContentLoaded", (event) => { const modal = new bootstrap.Modal('#start'); modal.show(); })</script>
+
 </head>
 
-<body>
-  <!-- Use header, main, and footer elements to give semantic structure -->
-  <header>
-    <img src="../Logo.png" height="25" />
-    <h1>Productivity Manager</h1>
+<body class="bg-dark text-light container">
+  <header class="container-sm">
+    <nav class="navbar navbar-expand-md navbar-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <img src="../Logo.png" style="height: 25px;" />
+          <span class="navbar-text">Productivity Manager</span>
+        </a>
 
-    <!-- Navigation elements -->
-    <nav>
-      <!-- Menu is a semantic alternative to <ul> that represents an interaction -->
-      <menu>
-        <li><a href="../">Home</a></li>
-        <li><a href="../breaktime">Breaktime</a></li>
-        <li><a href="../about">About</a></li>
-      </menu>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="collapsibleNavbar">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="../">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../breaktime">Breaktime</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../about">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <span>(username)</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                  class="bi bi-gear-fill" viewBox="0 0 16 16">
+                  <path
+                    d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z" />
+                </svg>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
     </nav>
 
-    <!-- Since we don't have the ability to style we use old style HTML to give some visual formatting -->
     <hr />
   </header>
 
-  <main>
-    <div>
-      <form method="get" action="">
-        <label for="timer">How long would you like your break to be?</label>
-        <input type="number" id="timer" placeholder="10" />
-        <label for="timer">minutes</label>
-        <button type="submit">Start</button>
-      </form>
+  <main style="display: flex; justify-content: center;">
+    <div class="modal" id="start">
+      <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content bg-dark">
+          <div class="container" style="max-width: 500px;">
+
+            <div class="modal-header">
+              <h4 class="modal-title">Welcome</h4>
+            </div>
+
+            <div class="modal-body">
+              <form method="get" action="">
+                <div class="mb-3 mt-3">
+                  <label for="timer" class="form-label">How long would you like your break to be?</label>
+                  <input type="number" class="form-control" id="timer" placeholder="10" min="1" max="30" />
+                  <label for="timer" class="form-label">(minutes)</label>
+                </div>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Start</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div>
-      <menu>
-        <li>Stick Game(will utilize websockets)</li>
-        <li>Hangman</li>
-        <li>Game 3(will utilize 3rd party services)</li>
+
+    <div class="container" style="width: 900px; max-width: 100%;">
+      <menu class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link active">Stick Game</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link">Hangman</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link">Game 3</a>
+        </li>
       </menu>
-      <div id="game-window" style="height: 600px; width: 900px; border: 1px solid black">
+      <div id="game-window" style="height: 600px; border: 1px solid white; max-width: 100%;">
         <svg width="80" height="14">
-          <polygon points="0,7 10,0 70,0 80,7 70,14 10,14"
-          style="fill:#00d;stroke-width:0;" />
+          <polygon points="0,7 10,0 70,0 80,7 70,14 10,14" style="fill:#00d;stroke-width:0;" />
         </svg>
         <svg width="14" height="80">
-          <polygon points="7,0 0,10 0,70 7,80 14,70 14,10"
-          style="fill:#d00;stroke-width:0;" />
+          <polygon points="7,0 0,10 0,70 7,80 14,70 14,10" style="fill:#d00;stroke-width:0;" />
         </svg>
         <svg width="16" height="16">
-          <circle cx="8" cy="8" r="7" stroke-width="0" fill="black" />
+          <circle cx="8" cy="8" r="7" stroke-width="0" fill="white" />
         </svg>
       </div>
     </div>
   </main>
 
-  <footer>
+  <footer class="m-3">
     <hr />
-    <span class="text-reset">Michael Davenport</span>
-    <br />
-    <a href="https://github.com/19mdavenport/cs260startup">GitHub</a>
+    <div class="d-flex justify-content-between">
+      <span class="text-reset">Michael Davenport</span>
+      <a href="https://github.com/19mdavenport/cs260startup">GitHub</a>
+    </div>
   </footer>
 </body>
 
