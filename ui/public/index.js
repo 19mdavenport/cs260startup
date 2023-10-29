@@ -1,3 +1,14 @@
+window.addEventListener("DOMContentLoaded", (event) => {
+    if (sessionStorage.getItem("currentUsername") == null) {
+        const loginModal = new bootstrap.Modal('#login');
+        loginModal.show();
+    }
+    else {
+        fillData();
+    }
+})
+
+
 function login() {
     const usernameEl = document.querySelector("#loginUsername");
     const passwordEl = document.querySelector("#loginPassword");
@@ -13,7 +24,7 @@ function login() {
     sessionStorage.setItem("currentUsername", usernameEl.value)
 
     bootstrap.Modal.getInstance('#login').hide();
-    
+
     fillData();
 }
 
@@ -48,21 +59,21 @@ function fillData() {
 
     const classes = [{ id: 1, name: "CS 260" }, { id: 2, name: "[Class Name]" }];
 
-    const assignments = [{ id: 1, class: 1, name: "Startup HTML", due: new Date(2023, 8, 30, 23, 59, 0, 0) },
-    { id: 2, class: 2, name: "Item 2", due: new Date(2023, 9, 30, 23, 59, 0, 0) },
-    { id: 3, class: 2, name: "Item 3", due: new Date(2023, 9, 31, 23, 59, 0, 0) },
-    { id: 4, class: 2, name: "Item 4", due: new Date(2023, 10, 1, 23, 59, 0, 0) },
-    { id: 5, class: 2, name: "Item 5", due: new Date(2023, 10, 2, 23, 59, 0, 0) },
-    { id: 6, class: 2, name: "Item 6", due: new Date(2023, 10, 3, 23, 59, 0, 0) },
-    { id: 7, class: 2, name: "Item 7", due: new Date(2023, 10, 4, 23, 59, 0, 0) },
-    { id: 8, class: 2, name: "Item 8", due: new Date(2023, 10, 5, 23, 59, 0, 0) }];
+    const assignments = [{ id: 1, class: 1, name: "Startup HTML", due: new Date(2023, 8, 30, 23, 59) },
+    { id: 2, class: 2, name: "Item 2", due: new Date(2023, 9, 30, 23, 59) },
+    { id: 3, class: 2, name: "Item 3", due: new Date(2023, 9, 31, 23, 59) },
+    { id: 4, class: 2, name: "Item 4", due: new Date(2023, 10, 1, 23, 59) },
+    { id: 5, class: 2, name: "Item 5", due: new Date(2023, 10, 2, 23, 59) },
+    { id: 6, class: 2, name: "Item 6", due: new Date(2023, 10, 3, 23, 59) },
+    { id: 7, class: 2, name: "Item 7", due: new Date(2023, 10, 4, 23, 59) },
+    { id: 8, class: 2, name: "Item 8", due: new Date(2023, 10, 5, 23, 59) }];
 
-    const largeAssignments = [{ id: 1, class: 1, name: "Startup HTML", hours: 3, due: new Date(2023, 9, 28, 23, 59, 0, 0) },
-    { id: 2, class: 2, name: "Item 2", hours: 2, due: new Date(2023, 10, 3, 23, 59, 0, 0) },
-    { id: 3, class: 2, name: "Item 3", hours: 13, due: new Date(2023, 10, 5, 23, 59, 0, 0) },
-    { id: 4, class: 2, name: "Item 4", hours: 4, due: new Date(2023, 10, 7, 23, 59, 0, 0) },
-    { id: 5, class: 2, name: "Item 5", hours: 7, due: new Date(2023, 10, 9, 23, 59, 0, 0) },
-    { id: 6, class: 2, name: "Item 6", hours: 23, due: new Date(2023, 10, 11, 23, 59, 0, 0) }];
+    const largeAssignments = [{ id: 1, class: 1, name: "Startup HTML", hours: 3, due: new Date(2023, 9, 28, 23, 59) },
+    { id: 2, class: 2, name: "Item 2", hours: 2, due: new Date(2023, 10, 3, 23, 59) },
+    { id: 3, class: 2, name: "Item 3", hours: 13, due: new Date(2023, 10, 5, 23, 59) },
+    { id: 4, class: 2, name: "Item 4", hours: 4, due: new Date(2023, 10, 7, 23, 59) },
+    { id: 5, class: 2, name: "Item 5", hours: 7, due: new Date(2023, 10, 9, 23, 59) },
+    { id: 6, class: 2, name: "Item 6", hours: 23, due: new Date(2023, 10, 11, 23, 59) }];
 
     assignments.sort((a, b) => a.due - b.due);
     largeAssignments.sort((a, b) => a.due - b.due);
@@ -81,7 +92,7 @@ function fillData() {
         row.appendChild(name);
 
         const className = document.createElement("td");
-        const classNameText = document.createTextNode((classes.find((classItem) => classItem.id == assignment.class) || {name:"Unknown"}).name);
+        const classNameText = document.createTextNode((classes.find((classItem) => classItem.id == assignment.class) || { name: "Unknown" }).name);
         className.appendChild(classNameText);
         row.appendChild(className);
 
@@ -90,10 +101,10 @@ function fillData() {
         dueDate.appendChild(dueDateText);
         row.appendChild(dueDate);
 
-        if(assignment.due < Date.now()) {
+        if (assignment.due < Date.now()) {
             row.classList.add("table-danger");
         }
-        else if(assignment.due < Date.now() + 24 * 60 * 60 * 1000) {
+        else if (assignment.due < Date.now() + 24 * 60 * 60 * 1000) {
             row.classList.add("table-warning");
         }
 
@@ -110,7 +121,7 @@ function fillData() {
         row.appendChild(name);
 
         const className = document.createElement("td");
-        const classNameText = document.createTextNode((classes.find((classItem) => classItem.id == assignment.class) || {name:"Unknown"}).name);
+        const classNameText = document.createTextNode((classes.find((classItem) => classItem.id == assignment.class) || { name: "Unknown" }).name);
         className.appendChild(classNameText);
         row.appendChild(className);
 
@@ -124,10 +135,10 @@ function fillData() {
         dueDate.appendChild(dueDateText);
         row.appendChild(dueDate);
 
-        if(assignment.due < Date.now()) {
+        if (assignment.due < Date.now()) {
             row.classList.add("table-danger");
         }
-        else if(assignment.due < Date.now() + 24 * 60 * 60 * 1000 * 7) {
+        else if (assignment.due < Date.now() + 24 * 60 * 60 * 1000 * 7) {
             row.classList.add("table-warning");
         }
 
