@@ -74,11 +74,10 @@ function startBreak() {
     let timer = setInterval(funcTimer, 1000);
 }
 
+var myGameArea;
 
 
 window.addEventListener("DOMContentLoaded", () => {
-
-
     var myGamePiece;
 
     function startGame() {
@@ -86,17 +85,20 @@ window.addEventListener("DOMContentLoaded", () => {
         myGameArea.start();
     }
 
-    var myGameArea = {
+    myGameArea = {
         canvas: document.querySelector("#game-canvas"),
         isMouseHover: false,
         size: 0,
         anchorOffsetX: 0,
         anchorOffsetY: 0,
+        playedSticks: [],
+        game: [],
         start: function () {
+            this.game = Array.from(Array(10), () => new Array(10))
             this.canvas.width = this.canvas.offsetWidth;
             this.canvas.height = this.canvas.offsetHeight;
-            //this.canvas.style.cursor = "none"; //hide the original cursor
             this.context = this.canvas.getContext("2d");
+            this.context.clearRect(0,0,this.canvas.width, this.canvas.height);
             this.interval = setInterval(updateGameArea, 20);
 
             this.canvas.addEventListener("mouseleave", function (event) {
@@ -109,10 +111,119 @@ window.addEventListener("DOMContentLoaded", () => {
                 myGameArea.x = e.offsetX;
                 myGameArea.y = e.offsetY;
             });
+            window.addEventListener('mousedown', function (e) {
+                if (myGameArea.isMouseHover) {
+                    myGameArea.playedSticks.push(new component(myGamePiece.width, myGamePiece.height, "rgb(60, 60, 255)", myGamePiece.x, myGamePiece.y));
+                    myGameArea.game[myGamePiece.row][myGamePiece.col] = 1;
+                    // let over = myGameArea.gameOver();
+                    // debugger;
+                    // if (over) {
+                    //     alert("You win!");
+                    //     startGame();
+                    //     return;
+                    // }
+                    while (true) {
+                        let row = Math.ceil(Math.random() * 10);
+                        let col = Math.ceil(Math.random() * 10);
+                        if ((row + col) % 2 == 0 && row > 0 && row < 10 && col > 0 && col < 10 && !myGameArea.game[row][col]) {
+                            let oppPiece;
+                            if (row % 2 == 0) {
+                                oppPiece = new component(
+                                    myGameArea.size * 11,
+                                    myGameArea.size,
+                                    "rgb(255, 60, 60)",
+                                    (col - 1) / 2 * myGameArea.size * 12 + myGameArea.anchorOffsetX + myGameArea.size,
+                                    (row - 1) / 2 * myGameArea.size * 12 + myGameArea.size * 6 + myGameArea.anchorOffsetY);
+                            }
+                            else {
+                                oppPiece = new component(
+                                    myGameArea.size,
+                                    myGameArea.size * 11,
+                                    "rgb(255, 60, 60)",
+                                    (col - 1) / 2 * myGameArea.size * 12 + myGameArea.size * 6 + myGameArea.anchorOffsetX,
+                                    (row - 1) / 2 * myGameArea.size * 12 + myGameArea.anchorOffsetY + myGameArea.size);
+                            }
+                            oppPiece.row = row;
+                            oppPiece.col = col;
+                            oppPiece.draw();
+                            myGameArea.game[row][col] = 2;
+                            myGameArea.playedSticks.push(oppPiece);
+                            // let over = myGameArea.gameOver();
+                            // if (over) {
+                            //     alert("You lose!");
+                            //     startGame();
+                            //     return;
+                            // }
+                            break;
+                        }
+                    }
+                }
+            });
             this.setUpAnchors();
         },
-        clear: function () {
-            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        gameOver: function () {
+            let visited = Array.from(Array(10), () => new Array(10));
+            this.visit(1, 1, 1, visited);
+            this.visit(3, 1, 1, visited);
+            this.visit(5, 1, 1, visited);
+            this.visit(7, 1, 1, visited);
+            this.visit(9, 1, 1, visited);
+
+            if (visited[9, 1] || visited[9, 3] || visited[9, 5] || visited[9, 7] || visited[9, 9]) return 1;
+
+            visited = Array.from(Array(10), () => new Array(10));
+            this.visit(1, 1, 2, visited);
+            this.visit(1, 3, 2, visited);
+            this.visit(1, 5, 2, visited);
+            this.visit(1, 7, 2, visited);
+            this.visit(1, 9, 2, visited);
+
+            if (visited[1, 9] || visited[3, 9] || visited[5, 9] || visited[7, 9] || visited[9, 9]) return 2;
+
+            return 0;
+
+        },
+        visit: function (row, col, player, visited) {
+            if (row > 9 || row < 1 || col > 9 || col < 1) return;
+            if (this.game[row][col] != player) return;
+            if ((player == 1 && row % 2 == 1) || (player == 2 && row % 2 == 1)) {
+                if (col < 8) {
+                    visited[row][col + 2] = true;
+                    this.visit(row, col + 2, player, visited);
+                }
+                if (col > 2) {
+                    visited[row][col - 2] = true;
+                    this.visit(row, col - 2, player, visited);
+                }
+            }
+            else {
+                if (row < 8) {
+                    visited[row + 2][col] = true;
+                    this.visit(row + 2, col, player, visited);
+                }
+                if (row > 2) {
+                    visited[row - 2][col] = true;
+                    this.visit(row - 2, col, player, visited);
+                }
+            }
+            if (col < 9 && row < 9) {
+                visited[row + 1][col + 1] = true;
+                this.visit(row + 1, col + 1, player, visited);
+            }
+            if (col < 9 && row > 1) {
+                visited[row - 1][col + 1] = true;
+                this.visit(row - 1, col + 1, player, visited);
+            }
+            if (col > 1 && row < 9) {
+                visited[row + 1][col - 1] = true;
+                this.visit(row + 1, col - 1, player, visited);
+            }
+            if (col > 1 && row > 1) {
+                visited[row - 1][col - 1] = true;
+                this.visit(row - 1, col - 1, player, visited);
+            }
+
+
         },
         setUpAnchors: function () {
             let spaceAvailable = Math.floor(Math.min(this.canvas.height, this.canvas.width) / 5);
@@ -154,30 +265,35 @@ window.addEventListener("DOMContentLoaded", () => {
 
     function updateGameArea() {
         myGamePiece.clear();
+        myGameArea.playedSticks.forEach((stick) => stick.draw());
         if (myGameArea.isMouseHover) {
             let col = Math.floor((myGameArea.x - myGameArea.anchorOffsetX + myGameArea.size * 3) / (myGameArea.size * 6));
             let row = Math.floor((myGameArea.y - myGameArea.anchorOffsetY + myGameArea.size * 3) / (myGameArea.size * 6));
-            if ((row + col) % 2 == 0) {
-                if(row % 2 == 1) {
+            if ((row + col) % 2 == 0 && row > 0 && row < 10 && col > 0 && col < 10 && !myGameArea.game[row][col]) {
+                if (row % 2 == 1) {
                     myGamePiece = new component(
-                        myGameArea.size * 11, 
-                        myGameArea.size, 
-                        "rgb(120, 120, 255)", 
-                        (col - 1) / 2 * myGameArea.size * 12 + myGameArea.anchorOffsetX + myGameArea.size, 
+                        myGameArea.size * 11,
+                        myGameArea.size,
+                        "rgb(120, 120, 255)",
+                        (col - 1) / 2 * myGameArea.size * 12 + myGameArea.anchorOffsetX + myGameArea.size,
                         (row - 1) / 2 * myGameArea.size * 12 + myGameArea.size * 6 + myGameArea.anchorOffsetY);
                 }
                 else {
                     myGamePiece = new component(
-                        myGameArea.size, 
-                        myGameArea.size * 11, 
-                        "rgb(120, 120, 255)", 
-                        (col - 1) / 2 * myGameArea.size * 12 + myGameArea.size * 6 + myGameArea.anchorOffsetX, 
+                        myGameArea.size,
+                        myGameArea.size * 11,
+                        "rgb(120, 120, 255)",
+                        (col - 1) / 2 * myGameArea.size * 12 + myGameArea.size * 6 + myGameArea.anchorOffsetX,
                         (row - 1) / 2 * myGameArea.size * 12 + myGameArea.anchorOffsetY + myGameArea.size);
                 }
+                myGamePiece.row = row;
+                myGamePiece.col = col;
                 myGamePiece.draw();
             }
 
         }
+
+
 
     }
 
