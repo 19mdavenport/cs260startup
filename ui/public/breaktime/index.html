@@ -11,9 +11,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Break time</title>
   <link rel="icon" href="../favicon.ico" />
-  <script type="text/javascript"
-    defer>window.addEventListener("DOMContentLoaded", (event) => { const modal = new bootstrap.Modal('#start'); modal.show(); })</script>
-
 </head>
 
 <body class="bg-dark text-light container">
@@ -73,8 +70,13 @@
                   <label for="timer" class="form-label">How long would you like your break to be?</label>
                   <input type="number" class="form-control" id="timer" placeholder="10" min="1" max="30" />
                   <label for="timer" class="form-label">(minutes)</label>
+                  <hr>
+
+                  <label for="workTime" class="form-label">After your break, how long do you want to work before you can take another break?</label>
+                  <input type="number" class="form-control" id="workTime" placeholder="60" min="5" max="180" />
+                  <label for="timworkTimeer" class="form-label">(minutes)</label>
                 </div>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Start</button>
+                <button type="button" class="btn btn-primary" onclick="startBreak()">Start</button>
               </form>
             </div>
           </div>
@@ -83,6 +85,7 @@
     </div>
 
     <div class="container" style="width: 900px; max-width: 100%;">
+      <h2>Break Time<span id="breakTimeLeft"></span></h2>
       <menu class="nav nav-tabs">
         <li class="nav-item">
           <a class="nav-link active">Stick Game</a>

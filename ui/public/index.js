@@ -1,4 +1,25 @@
 window.addEventListener("DOMContentLoaded", (event) => {
+    const breakTimerEl = document.querySelector("#breakTimer");
+    const breakTimeStore = localStorage.getItem("breakTimeNext")
+    if (breakTimeStore == null) {
+        breakTimerEl.innerHTML = "[READY]";
+    }
+    else {
+        const breakTimeNext = Date.parse(breakTimeStore);
+        let funcTimer = () => {
+            msleft = breakTimeNext - Date.now();
+            if (msleft < 0) {
+                breakTimerEl.innerHTML = "[READY]";
+                clearInterval(timer);
+            }
+            else {
+                breakTimerEl.innerHTML = `[${Math.floor(msleft / 60000)}:${Math.floor((msleft / 1000) % 60).toString().padStart(2, '0')}]`;
+            };
+        }
+        funcTimer();
+        let timer = setInterval(funcTimer, 1000);
+    }
+
     if (sessionStorage.getItem("currentUsername") == null) {
         const loginModal = new bootstrap.Modal('#login');
         loginModal.show();
@@ -6,7 +27,8 @@ window.addEventListener("DOMContentLoaded", (event) => {
     else {
         fillData();
     }
-})
+});
+
 
 
 function login() {
@@ -26,7 +48,7 @@ function login() {
     bootstrap.Modal.getInstance('#login').hide();
 
     fillData();
-}
+};
 
 function register() {
     const usernameEl = document.querySelector("#regUsername");
