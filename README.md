@@ -57,3 +57,12 @@ For this deliverable I styled the application into a form more resembling its fi
 - **Application elements** - Used (i hope good) contrast and whitespace
 - **Application text content** - Consistent fonts
 - **Application images** - Placeholder logo is styled into the navbar
+
+## JavaScript deliverable
+
+For this deliverable I implemented some front-end javascript for the application
+
+- **login** - You must login or register before viewing the main page. You must register before logging in (just kept in localStorage for now)
+- **database** - Displayed assignments and classes. Currently this is stored in a local array, but will use a database later.
+- **WebSocket** - Stick Game on the break time page is almost finished, except for the websocket 2-player functionality
+- **application logic** - One must define a minimum amount of time to work after finishing a break, and cannot start a new break until it is finished. Timers are displayed on both pages for how long you have left.
