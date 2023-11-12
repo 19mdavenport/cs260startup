@@ -75,7 +75,7 @@ async function register() {
 }
 
 
-async function fillData() {
+async function randomWord() {
     let wordReponse = await fetch('https://random-word-api.vercel.app/api?words=1');
     let wordOfDay = await wordReponse.json();
 
@@ -91,8 +91,13 @@ async function fillData() {
         },
         body: JSON.stringify(request)
     });
+}
 
-    
+
+async function fillData() {
+    await randomWord();
+    let username = sessionStorage.getItem("currentUsername");
+
     document.querySelector("#usernameSettings").innerHTML = username;
 
     const classesResponse = await fetch(`/api/group/${username}`);

@@ -140,9 +140,6 @@ apiRouter.get('/project/:username', (req, res) => {
 
 
 
-// app.use((_req, res) => {
-//   res.sendFile('index.html', { root: 'ui/public' });
-// });
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
