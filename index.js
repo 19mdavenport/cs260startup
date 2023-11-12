@@ -18,13 +18,13 @@ apiRouter.post('/user', (req, res) => {
   users[req.body.username].groups = [{ id: 1, name: "CS 260" }, { id: 2, name: "[Class Name]" }];
 
   users[req.body.username].tasks = [{ id: 1, group: 1, name: "Startup HTML", due: new Date(2023, 8, 30, 23, 59) },
-  { id: 2, group: 2, name: "Item 2", due: new Date(2023, 9, 30, 23, 59) },
-  { id: 3, group: 2, name: "Item 3", due: new Date(2023, 10, 11, 23, 59) },
-  { id: 4, group: 2, name: "Item 4", due: new Date(2023, 10, 13, 23, 59) },
-  { id: 5, group: 2, name: "Item 5", due: new Date(2023, 10, 14, 23, 59) },
-  { id: 6, group: 2, name: "Item 6", due: new Date(2023, 10, 15, 23, 59) },
-  { id: 7, group: 2, name: "Item 7", due: new Date(2023, 10, 16, 23, 59) },
-  { id: 8, group: 2, name: "Item 8", due: new Date(2023, 10, 17, 23, 59) }];
+  { id: 2, group: 2, name: "Item 2", due: new Date(2023, 10, 11, 23, 59) },
+  { id: 3, group: 2, name: "Item 3", due: new Date(2023, 10, 13, 23, 59) },
+  { id: 4, group: 2, name: "Item 4", due: new Date(2023, 10, 14, 23, 59) },
+  { id: 5, group: 2, name: "Item 5", due: new Date(2023, 10, 15, 23, 59) },
+  { id: 6, group: 2, name: "Item 6", due: new Date(2023, 10, 16, 23, 59) },
+  { id: 7, group: 2, name: "Item 7", due: new Date(2023, 10, 17, 23, 59) },
+  { id: 8, group: 2, name: "Item 8", due: new Date(2023, 10, 18, 23, 59) }];
 
   users[req.body.username].projects = [{ id: 1, group: 1, name: "Startup HTML", hours: 3, due: new Date(2023, 9, 28, 23, 59) },
   { id: 2, group: 2, name: "Item 2", hours: 2, due: new Date(2023, 10, 15, 23, 59) },

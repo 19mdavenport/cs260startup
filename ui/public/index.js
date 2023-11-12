@@ -95,6 +95,7 @@ async function fillData() {
     const largeAssignmentsEl = document.querySelector("#largeAssignmentList");
     const classesEl = document.querySelector("#classes");
 
+    debugger;
     assignmentsEl.innerHTML = '';
     assignments.forEach((assignment) => {
         const row = document.createElement("tr");
@@ -110,14 +111,15 @@ async function fillData() {
         row.appendChild(className);
 
         const dueDate = document.createElement("td");
-        const dueDateText = document.createTextNode(assignment.due.toLocaleString().toString());
+        let due = new Date(assignment.due);
+        const dueDateText = document.createTextNode(due.toLocaleString().toString());
         dueDate.appendChild(dueDateText);
         row.appendChild(dueDate);
 
-        if (assignment.due < Date.now()) {
+        if (due < Date.now()) {
             row.classList.add("table-danger");
         }
-        else if (assignment.due < Date.now() + 24 * 60 * 60 * 1000) {
+        else if (due < Date.now() + 24 * 60 * 60 * 1000) {
             row.classList.add("table-warning");
         }
 
@@ -144,14 +146,15 @@ async function fillData() {
         row.appendChild(timeLeft);
 
         const dueDate = document.createElement("td");
-        const dueDateText = document.createTextNode(assignment.due.toLocaleString().toString());
+        let due = new Date(assignment.due);
+        const dueDateText = document.createTextNode(due.toLocaleString().toString());
         dueDate.appendChild(dueDateText);
         row.appendChild(dueDate);
 
-        if (assignment.due < Date.now()) {
+        if (due < Date.now()) {
             row.classList.add("table-danger");
         }
-        else if (assignment.due < Date.now() + 24 * 60 * 60 * 1000 * 7) {
+        else if (due < Date.now() + 24 * 60 * 60 * 1000 * 7) {
             row.classList.add("table-warning");
         }
 
