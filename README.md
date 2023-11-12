@@ -66,3 +66,14 @@ For this deliverable I implemented some front-end javascript for the application
 - **database** - Displayed assignments and classes. Currently this is stored in a local array, but will use a database later.
 - **WebSocket** - Stick Game on the break time page is almost finished, except for the websocket 2-player functionality
 - **application logic** - One must define a minimum amount of time to work after finishing a break, and cannot start a new break until it is finished. Timers are displayed on both pages for how long you have left.
+
+
+## Service deliverable
+
+For this deliverable I added backend endpoints for bare-bones register/login and for adding and retrieving classes, assignments, and projects.
+
+- **Node.js/Express HTTP service** - done!
+- **Static middleware for frontend** - done!
+- **Calls to third party endpoints** - I didn't really know what to do for this, but every time you load the home page, it calls an api and gets a random word and adds that as an assignment name
+- **Backend service endpoints** - Placeholders for login that stores the current user on the server. Endpoints for adding and retrieving classes, assignments, and projects.
+- **Frontend calls service endpoints** - I did this using the fetch function. Calls to all three gets as well as one put
