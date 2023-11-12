@@ -82,7 +82,7 @@ async function randomWord() {
     let username = sessionStorage.getItem("currentUsername")
 
 
-    const request = { group: 2, name: wordOfDay[0], due: new Date(Date.now() + Math.floor(Math.random() * 1234567890)) };
+    const request = { group: 2, name: wordOfDay[0], due: new Date(Date.now() + Math.floor(Math.random() * 897654321)) };
 
     const response = await fetch(`/api/task/${username}`, {
         method: "PUT",
