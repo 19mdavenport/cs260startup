@@ -62,7 +62,8 @@ apiRouter.put('/group/:username', (req, res) => {
     res.sendStatus(401);
     return;
   }
-  user.groups.push(req.body)
+  user.groups.push(req.body);
+  res.sendStatus(200);
 });
 
 apiRouter.get('/group/:username', (req, res) => {
@@ -75,7 +76,7 @@ apiRouter.get('/group/:username', (req, res) => {
     res.sendStatus(401);
     return;
   }
-  res.send(user.groups)
+  res.send(user.groups);
 });
 
 
@@ -91,7 +92,8 @@ apiRouter.put('/task/:username', (req, res) => {
     res.sendStatus(401);
     return;
   }
-  user.tasks.push(req.body)
+  user.tasks.push(req.body);
+  res.sendStatus(200);
 });
 
 apiRouter.get('/task/:username', (req, res) => {
@@ -104,7 +106,7 @@ apiRouter.get('/task/:username', (req, res) => {
     res.sendStatus(401);
     return;
   }
-  res.send(user.tasks)
+  res.send(user.tasks);
 });
 
 
@@ -119,7 +121,8 @@ apiRouter.put('/project/:username', (req, res) => {
     res.sendStatus(401);
     return;
   }
-  user.projects.push(req.body)
+  user.projects.push(req.body);
+  res.sendStatus(200);
 });
 
 apiRouter.get('/project/:username', (req, res) => {
@@ -132,7 +135,7 @@ apiRouter.get('/project/:username', (req, res) => {
     res.sendStatus(401);
     return;
   }
-  res.send(user.projects)
+  res.send(user.projects);
 });
 
 

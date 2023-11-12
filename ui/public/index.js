@@ -76,7 +76,23 @@ async function register() {
 
 
 async function fillData() {
+    let wordReponse = await fetch('https://random-word-api.vercel.app/api?words=1');
+    let wordOfDay = await wordReponse.json();
+
     let username = sessionStorage.getItem("currentUsername")
+
+
+    const request = { group: 2, name: wordOfDay[0], due: new Date(Date.now() + Math.floor(Math.random() * 1234567890)) };
+
+    const response = await fetch(`/api/task/${username}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(request)
+    });
+
+    
     document.querySelector("#usernameSettings").innerHTML = username;
 
     const classesResponse = await fetch(`/api/group/${username}`);
@@ -95,7 +111,6 @@ async function fillData() {
     const largeAssignmentsEl = document.querySelector("#largeAssignmentList");
     const classesEl = document.querySelector("#classes");
 
-    debugger;
     assignmentsEl.innerHTML = '';
     assignments.forEach((assignment) => {
         const row = document.createElement("tr");
