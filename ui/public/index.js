@@ -50,52 +50,41 @@ function login() {
     fillData();
 };
 
-function register() {
+async function register() {
     const usernameEl = document.querySelector("#regUsername");
     const passwordEl = document.querySelector("#regPassword");
     const emailEl = document.querySelector("#regEmail");
 
     const user = { username: usernameEl.value, password: passwordEl.value, email: emailEl.value };
 
-    const users = JSON.parse(localStorage.getItem("registeredUsers")) || [];
-
-    if (users.some((u) => user.username === u.username)) {
-        const errorEl = document.querySelector("#regError");
-        errorEl.innerHTML = "<p class=\"text-danger\">Username taken</p>";
-        return;
-    }
-
-    users.push(user);
+    const response = await fetch('/api/user', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user)
+    });
 
     sessionStorage.setItem("currentUsername", usernameEl.value)
 
-    localStorage.setItem("registeredUsers", JSON.stringify(users));
     bootstrap.Modal.getInstance('#register').hide();
 
     fillData();
 }
 
 
-function fillData() {
-    document.querySelector("#usernameSettings").innerHTML = sessionStorage.getItem("currentUsername");
+async function fillData() {
+    let username = sessionStorage.getItem("currentUsername")
+    document.querySelector("#usernameSettings").innerHTML = username;
 
-    const classes = [{ id: 1, name: "CS 260" }, { id: 2, name: "[Class Name]" }];
+    const classesResponse = await fetch(`/api/group/${username}`);
+    const classes = await classesResponse.json();
 
-    const assignments = [{ id: 1, class: 1, name: "Startup HTML", due: new Date(2023, 8, 30, 23, 59) },
-    { id: 2, class: 2, name: "Item 2", due: new Date(2023, 9, 30, 23, 59) },
-    { id: 3, class: 2, name: "Item 3", due: new Date(2023, 9, 31, 23, 59) },
-    { id: 4, class: 2, name: "Item 4", due: new Date(2023, 10, 1, 23, 59) },
-    { id: 5, class: 2, name: "Item 5", due: new Date(2023, 10, 2, 23, 59) },
-    { id: 6, class: 2, name: "Item 6", due: new Date(2023, 10, 3, 23, 59) },
-    { id: 7, class: 2, name: "Item 7", due: new Date(2023, 10, 4, 23, 59) },
-    { id: 8, class: 2, name: "Item 8", due: new Date(2023, 10, 5, 23, 59) }];
+    const assignmentsResponse = await fetch(`/api/task/${username}`);
+    const assignments = await assignmentsResponse.json();
 
-    const largeAssignments = [{ id: 1, class: 1, name: "Startup HTML", hours: 3, due: new Date(2023, 9, 28, 23, 59) },
-    { id: 2, class: 2, name: "Item 2", hours: 2, due: new Date(2023, 10, 3, 23, 59) },
-    { id: 3, class: 2, name: "Item 3", hours: 13, due: new Date(2023, 10, 5, 23, 59) },
-    { id: 4, class: 2, name: "Item 4", hours: 4, due: new Date(2023, 10, 7, 23, 59) },
-    { id: 5, class: 2, name: "Item 5", hours: 7, due: new Date(2023, 10, 9, 23, 59) },
-    { id: 6, class: 2, name: "Item 6", hours: 23, due: new Date(2023, 10, 11, 23, 59) }];
+    const projectsResponse = await fetch(`/api/project/${username}`);
+    const largeAssignments = await projectsResponse.json();
 
     assignments.sort((a, b) => a.due - b.due);
     largeAssignments.sort((a, b) => a.due - b.due);
