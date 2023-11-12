@@ -31,17 +31,19 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
 
 
-function login() {
+async function login() {
     const usernameEl = document.querySelector("#loginUsername");
     const passwordEl = document.querySelector("#loginPassword");
 
-    const users = JSON.parse(localStorage.getItem("registeredUsers")) || [];
+    const request = { username: usernameEl.value, password: passwordEl.value};
 
-    if (!users.some((u) => usernameEl.value === u.username && passwordEl.value === u.password)) {
-        const errorEl = document.querySelector("#loginError");
-        errorEl.innerHTML = "<p class=\"text-danger\">Incorrect username or password</p>";
-        return;
-    }
+    const response = await fetch('/api/session', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(request)
+    });
 
     sessionStorage.setItem("currentUsername", usernameEl.value)
 
@@ -55,14 +57,14 @@ async function register() {
     const passwordEl = document.querySelector("#regPassword");
     const emailEl = document.querySelector("#regEmail");
 
-    const user = { username: usernameEl.value, password: passwordEl.value, email: emailEl.value };
+    const request = { username: usernameEl.value, password: passwordEl.value, email: emailEl.value };
 
     const response = await fetch('/api/user', {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify(user)
+        body: JSON.stringify(request)
     });
 
     sessionStorage.setItem("currentUsername", usernameEl.value)

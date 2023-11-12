@@ -36,7 +36,7 @@ apiRouter.post('/user', (req, res) => {
   res.sendStatus(200);
 });
 
-apiRouter.get('/session', (req, res) => {
+apiRouter.post('/session', (req, res) => {
   if (!req.body.username || !req.body.password) {
     res.sendStatus(400);
     return;
@@ -47,6 +47,7 @@ apiRouter.get('/session', (req, res) => {
     res.sendStatus(401);
     return;
   }
+  res.sendStatus(200);
 });
 
 
