@@ -104,8 +104,8 @@ async function fillData() {
     const projectsResponse = await fetch(`/api/project/${username}`);
     const largeAssignments = await projectsResponse.json();
 
-    assignments.sort((a, b) => a.due - b.due);
-    largeAssignments.sort((a, b) => a.due - b.due);
+    assignments.sort((a, b) => new Date(a.due) - new Date(b.due));
+    largeAssignments.sort((a, b) => new Date(a.due) - new Date(b.due));
 
     const assignmentsEl = document.querySelector("#normalAssignmentList");
     const largeAssignmentsEl = document.querySelector("#largeAssignmentList");
