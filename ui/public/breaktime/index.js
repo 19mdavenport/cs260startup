@@ -74,7 +74,6 @@ function startBreak() {
     let timer = setInterval(funcTimer, 1000);
 }
 
-var myGameArea;
 
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -94,11 +93,10 @@ window.addEventListener("DOMContentLoaded", () => {
         playedSticks: [],
         game: [],
         start: function () {
-            this.game = Array.from(Array(10), () => new Array(10))
+            this.game = Array.from(Array(10), () => new Array(10).fill(0));
             this.canvas.width = this.canvas.offsetWidth;
             this.canvas.height = this.canvas.offsetHeight;
             this.context = this.canvas.getContext("2d");
-            this.context.clearRect(0,0,this.canvas.width, this.canvas.height);
             this.interval = setInterval(updateGameArea, 20);
 
             this.canvas.addEventListener("mouseleave", function (event) {
@@ -111,17 +109,15 @@ window.addEventListener("DOMContentLoaded", () => {
                 myGameArea.x = e.offsetX;
                 myGameArea.y = e.offsetY;
             });
-            window.addEventListener('mousedown', function (e) {
-                if (myGameArea.isMouseHover) {
+            this.canvas.addEventListener('mousedown', function (e) {
+                if (myGameArea.isMouseHover && !myGameArea.game[myGamePiece.row][myGamePiece.col]) {
                     myGameArea.playedSticks.push(new component(myGamePiece.width, myGamePiece.height, "rgb(60, 60, 255)", myGamePiece.x, myGamePiece.y));
                     myGameArea.game[myGamePiece.row][myGamePiece.col] = 1;
-                    // let over = myGameArea.gameOver();
-                    // debugger;
-                    // if (over) {
-                    //     alert("You win!");
-                    //     startGame();
-                    //     return;
-                    // }
+                    let over = myGameArea.gameOver();
+                    if (over) {
+                        alert("You win!");
+                        myGameArea.restartGame();
+                    }
                     while (true) {
                         let row = Math.ceil(Math.random() * 10);
                         let col = Math.ceil(Math.random() * 10);
@@ -148,12 +144,11 @@ window.addEventListener("DOMContentLoaded", () => {
                             oppPiece.draw();
                             myGameArea.game[row][col] = 2;
                             myGameArea.playedSticks.push(oppPiece);
-                            // let over = myGameArea.gameOver();
-                            // if (over) {
-                            //     alert("You lose!");
-                            //     startGame();
-                            //     return;
-                            // }
+                            let over = myGameArea.gameOver();
+                            if (over) {
+                                alert("You lose!");
+                                myGameArea.restartGame();
+                            }
                             break;
                         }
                     }
@@ -161,68 +156,59 @@ window.addEventListener("DOMContentLoaded", () => {
             });
             this.setUpAnchors();
         },
+        restartGame: function() {
+            clearInterval(this.interval);
+            this.game = Array.from(Array(10), () => new Array(10).fill(0));
+            this.playedSticks = [];
+            this.context.clearRect(0,0,this.canvas.width, this.canvas.height);
+
+            this.setUpAnchors();
+            
+            this.interval = setInterval(updateGameArea, 20);
+        },
         gameOver: function () {
-            let visited = Array.from(Array(10), () => new Array(10));
+            let visited = Array.from(Array(10), () => new Array(10).fill(false));
             this.visit(1, 1, 1, visited);
             this.visit(3, 1, 1, visited);
             this.visit(5, 1, 1, visited);
             this.visit(7, 1, 1, visited);
             this.visit(9, 1, 1, visited);
 
-            if (visited[9, 1] || visited[9, 3] || visited[9, 5] || visited[9, 7] || visited[9, 9]) return 1;
-
-            visited = Array.from(Array(10), () => new Array(10));
+            if (visited[1][9] || visited[3][9] || visited[5][9] || visited[7][9] || visited[9][9]) return 1;
+            
+            debugger;
+            visited = Array.from(Array(10), () => new Array(10).fill(false));
             this.visit(1, 1, 2, visited);
             this.visit(1, 3, 2, visited);
             this.visit(1, 5, 2, visited);
             this.visit(1, 7, 2, visited);
             this.visit(1, 9, 2, visited);
 
-            if (visited[1, 9] || visited[3, 9] || visited[5, 9] || visited[7, 9] || visited[9, 9]) return 2;
+
+            if (visited[9][1] || visited[9][3] || visited[9][5] || visited[9][7] || visited[9][9]) return 2;
 
             return 0;
 
         },
         visit: function (row, col, player, visited) {
             if (row > 9 || row < 1 || col > 9 || col < 1) return;
+            if(visited[row][col]) return;
             if (this.game[row][col] != player) return;
+            
+            visited[row][col] = true;
+
             if ((player == 1 && row % 2 == 1) || (player == 2 && row % 2 == 1)) {
-                if (col < 8) {
-                    visited[row][col + 2] = true;
-                    this.visit(row, col + 2, player, visited);
-                }
-                if (col > 2) {
-                    visited[row][col - 2] = true;
-                    this.visit(row, col - 2, player, visited);
-                }
+                if (col < 8) this.visit(row, col + 2, player, visited);
+                if (col > 2) this.visit(row, col - 2, player, visited);
             }
             else {
-                if (row < 8) {
-                    visited[row + 2][col] = true;
-                    this.visit(row + 2, col, player, visited);
-                }
-                if (row > 2) {
-                    visited[row - 2][col] = true;
-                    this.visit(row - 2, col, player, visited);
-                }
+                if (row < 8) this.visit(row + 2, col, player, visited);
+                if (row > 2) this.visit(row - 2, col, player, visited);
             }
-            if (col < 9 && row < 9) {
-                visited[row + 1][col + 1] = true;
-                this.visit(row + 1, col + 1, player, visited);
-            }
-            if (col < 9 && row > 1) {
-                visited[row - 1][col + 1] = true;
-                this.visit(row - 1, col + 1, player, visited);
-            }
-            if (col > 1 && row < 9) {
-                visited[row + 1][col - 1] = true;
-                this.visit(row + 1, col - 1, player, visited);
-            }
-            if (col > 1 && row > 1) {
-                visited[row - 1][col - 1] = true;
-                this.visit(row - 1, col - 1, player, visited);
-            }
-
+            if (col < 9 && row < 9) this.visit(row + 1, col + 1, player, visited);
+            if (col < 9 && row > 1) this.visit(row + 1, col - 1, player, visited);
+            if (col > 1 && row < 9) this.visit(row - 1, col + 1, player, visited);
+            if (col > 1 && row > 1) this.visit(row - 1, col - 1, player, visited);
 
         },
         setUpAnchors: function () {
@@ -259,7 +245,7 @@ window.addEventListener("DOMContentLoaded", () => {
         }
         this.clear = function () {
             ctx = myGameArea.context;
-            ctx.clearRect(this.x, this.y, this.width + 1, this.height + 1);
+            ctx.clearRect(this.x - 1, this.y - 1, this.width + 2, this.height + 2);
         }
     }
 
@@ -292,6 +278,7 @@ window.addEventListener("DOMContentLoaded", () => {
             }
 
         }
+        myGameArea.setUpAnchors();
 
 
 

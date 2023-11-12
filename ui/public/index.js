@@ -102,7 +102,7 @@ function fillData() {
 
     const assignmentsEl = document.querySelector("#normalAssignmentList");
     const largeAssignmentsEl = document.querySelector("#largeAssignmentList");
-    const classesEl = document.querySelector("#classes")
+    const classesEl = document.querySelector("#classes");
 
     assignmentsEl.innerHTML = '';
     assignments.forEach((assignment) => {
@@ -114,7 +114,7 @@ function fillData() {
         row.appendChild(name);
 
         const className = document.createElement("td");
-        const classNameText = document.createTextNode((classes.find((classItem) => classItem.id == assignment.class) || { name: "Unknown" }).name);
+        const classNameText = document.createTextNode((classes.find((classItem) => classItem.id == assignment.group) || { name: "Unknown" }).name);
         className.appendChild(classNameText);
         row.appendChild(className);
 
@@ -143,7 +143,7 @@ function fillData() {
         row.appendChild(name);
 
         const className = document.createElement("td");
-        const classNameText = document.createTextNode((classes.find((classItem) => classItem.id == assignment.class) || { name: "Unknown" }).name);
+        const classNameText = document.createTextNode((classes.find((classItem) => classItem.id == assignment.group) || { name: "Unknown" }).name);
         className.appendChild(classNameText);
         row.appendChild(className);
 
