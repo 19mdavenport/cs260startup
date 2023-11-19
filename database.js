@@ -26,10 +26,44 @@ async function addUser(user) {
 
 async function getUser(username) {
     const query = {username: username};
-    const options = {sort: {username: -1}, limit: 1,};
-    const cursor = userCollection.find(query, options);
+    const cursor = userCollection.find(query);
+    return await cursor.toArray(); 
+}
+
+async function addGroup(group) {
+    const result = await groupCollection.insertOne(group);
+    return result;
+}
+
+async function getGroups(username) {
+    const query = {user: username};
+    const cursor = groupCollection.find(query);
+    return await cursor.toArray();
+}
+
+async function addTask(group) {
+    const result = await taskCollection.insertOne(group);
+    return result;
+}
+
+async function getTasks(username) {
+    const query = {user: username};
+    const cursor = taskCollection.find(query);
+    return await cursor.toArray();
+}
+
+async function addProject(group) {
+    const result = await projectCollection.insertOne(group);
+    return result;
+}
+
+async function getProjects(username) {
+    const query = {user: username};
+    const cursor = projectCollection.find(query);
     return await cursor.toArray();
 }
 
 
-module.exports = { addUser, getUser };
+
+
+module.exports = { addUser, getUser, addGroup, getGroups, addTask, getTasks, addProject, getProjects };
