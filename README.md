@@ -77,3 +77,11 @@ For this deliverable I added backend endpoints for bare-bones register/login and
 - **Calls to third party endpoints** - I didn't really know what to do for this, but every time you load the home page, it calls an api and gets a random word and adds that as an assignment name
 - **Backend service endpoints** - Placeholders for login that stores the current user on the server. Endpoints for adding and retrieving classes, assignments, and projects.
 - **Frontend calls service endpoints** - I did this using the fetch function. Calls to all three gets as well as one put
+
+## DB deliverable
+
+For this deliverable I stored the users(still cleartext passwords), classes, assignments, and projects in the database.
+
+- **MongoDB Atlas database created** - done!
+- **Endpoints for data** - My stubbed out endpoints now process the data and send it to Mongo.
+- **Stores data in MongoDB** - done!
