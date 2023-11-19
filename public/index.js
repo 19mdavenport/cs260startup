@@ -33,7 +33,6 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
 
 async function login() {
-    console.log(Date.now());
     const usernameEl = document.querySelector("#loginUsername");
     const passwordEl = document.querySelector("#loginPassword");
 
@@ -52,13 +51,11 @@ async function login() {
     bootstrap.Modal.getInstance('#login').hide();
 
     await fillData();
-    console.log(Date.now());
     await randomWord();
     await fillData();
 };
 
 async function register() {
-    console.log(Date.now());
     const usernameEl = document.querySelector("#regUsername");
     const passwordEl = document.querySelector("#regPassword");
     const emailEl = document.querySelector("#regEmail");
@@ -78,7 +75,6 @@ async function register() {
     bootstrap.Modal.getInstance('#register').hide();
 
     await fillData();
-    console.log(Date.now());
     await randomWord();
     await fillData();
 }
