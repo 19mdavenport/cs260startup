@@ -6,6 +6,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
     }
     else {
         const breakTimeNext = Date.parse(breakTimeStore);
+        let timer;
         let funcTimer = () => {
             msleft = breakTimeNext - Date.now();
             if (msleft < 0) {
@@ -17,7 +18,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
             };
         }
         funcTimer();
-        let timer = setInterval(funcTimer, 1000);
+        timer = setInterval(funcTimer, 1000);
     }
 
     if (sessionStorage.getItem("currentUsername") == null) {
@@ -32,6 +33,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
 
 async function login() {
+    console.log(Date.now());
     const usernameEl = document.querySelector("#loginUsername");
     const passwordEl = document.querySelector("#loginPassword");
 
@@ -49,10 +51,14 @@ async function login() {
 
     bootstrap.Modal.getInstance('#login').hide();
 
-    fillData();
+    await fillData();
+    console.log(Date.now());
+    await randomWord();
+    await fillData();
 };
 
 async function register() {
+    console.log(Date.now());
     const usernameEl = document.querySelector("#regUsername");
     const passwordEl = document.querySelector("#regPassword");
     const emailEl = document.querySelector("#regEmail");
@@ -71,7 +77,10 @@ async function register() {
 
     bootstrap.Modal.getInstance('#register').hide();
 
-    fillData();
+    await fillData();
+    console.log(Date.now());
+    await randomWord();
+    await fillData();
 }
 
 
@@ -95,7 +104,6 @@ async function randomWord() {
 
 
 async function fillData() {
-    await randomWord();
     let username = sessionStorage.getItem("currentUsername");
 
     document.querySelector("#usernameSettings").innerHTML = username;
