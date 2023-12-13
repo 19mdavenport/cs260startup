@@ -25,9 +25,7 @@ async function addUser(user) {
 }
 
 async function getUser(username) {
-    const query = {username: username};
-    const cursor = userCollection.find(query);
-    return await cursor.toArray(); 
+    return userCollection.findOne({username: username});
 }
 
 async function addGroup(group) {

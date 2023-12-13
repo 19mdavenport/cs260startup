@@ -1,28 +1,37 @@
+const cookieParser = require('cookie-parser');
+const uuid = require('uuid');
+const bcrypt = require('bcrypt');
 const express = require('express');
 const app = express();
 const DB = require('./database.js');
 
+const authCookieName = 'token';
+
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.static('public'));
+app.set('trust proxy', true);
 var apiRouter = express.Router();
 app.use(`/api`, apiRouter);
 
-apiRouter.post('/user', (req, res) => {
-  if (!req.body.username || !req.body.password || !req.body.email) {
-    res.sendStatus(400);
+apiRouter.post('/user', async (req, res) => {
+  if (await DB.getUser(req.body.username)) {
+    res.status(409).send({ msg: 'Existing user' });
     return;
   }
-
+  const passwordHash = await bcrypt.hash(req.body.password, 10);
   const username = req.body.username;
+  let user = {
+    username: username,
+    password: passwordHash,
+    token: uuid.v4(),
+  };
+  await DB.addUser(user);
 
-  if (DB.getUser(username).length > 0) {
-    res.sendStatus(403);
-    return;
-  }
-
-  DB.addUser({ username: username, password: req.body.password, email: req.body.email });
+  setAuthCookie(res, user.token);
+  
 
   const groups = [{ name: "CS 260", user: username }, { name: "[Class Name]", user: username }];
   groups.forEach((group) => DB.addGroup(group));
@@ -45,21 +54,22 @@ apiRouter.post('/user', (req, res) => {
   { group: 2, name: "Item 6", hours: 23, due: new Date(2023, 10, 24, 23, 59), user: username }];
   projects.forEach((project) => DB.addProject(project));
 
-  res.sendStatus(200);
+  res.send({
+    id: user._id,
+  });
 });
 
 apiRouter.post('/session', async (req, res) => {
-  if (!req.body.username || !req.body.password) {
-    res.sendStatus(400);
-    return;
-  }
   const user = await DB.getUser(req.body.username);
 
-  if (user.length == 0 || user[0].password !== req.body.password) {
-    res.sendStatus(401);
-    return;
+  if (user) {
+    if (await bcrypt.compare(req.body.password, user.password)) {
+      setAuthCookie(res, user.token);
+      res.send({ id: user._id });
+      return;
+    }
   }
-  res.sendStatus(200);
+  res.status(401).send({ msg: 'Unauthorized' });
 });
 
 
@@ -74,7 +84,7 @@ apiRouter.put('/group/:username', (req, res) => {
     res.sendStatus(401);
     return;
   }
-  DB.addGroup({name: req.body.name, user: req.params.username});
+  DB.addGroup({ name: req.body.name, user: req.params.username });
   res.sendStatus(200);
 });
 
@@ -118,7 +128,7 @@ apiRouter.get('/task/:username', async (req, res) => {
     res.sendStatus(401);
     return;
   }
-  
+
   res.send(await DB.getTasks(req.params.username));
 });
 
@@ -148,7 +158,7 @@ apiRouter.get('/project/:username', async (req, res) => {
     res.sendStatus(401);
     return;
   }
-  
+
   res.send(await DB.getProjects(req.params.username));
 });
 
@@ -158,3 +168,12 @@ apiRouter.get('/project/:username', async (req, res) => {
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
+
+
+function setAuthCookie(res, authToken) {
+  res.cookie(authCookieName, authToken, {
+    secure: true,
+    httpOnly: true,
+    sameSite: 'strict',
+  });
+}
