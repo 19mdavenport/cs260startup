@@ -167,6 +167,7 @@ window.addEventListener("DOMContentLoaded", () => {
             this.interval = setInterval(updateGameArea, 20);
         },
         gameOver: function () {
+            debugger;
             let visited = Array.from(Array(10), () => new Array(10).fill(false));
             this.visit(1, 1, 1, visited);
             this.visit(3, 1, 1, visited);
@@ -176,7 +177,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
             if (visited[1][9] || visited[3][9] || visited[5][9] || visited[7][9] || visited[9][9]) return 1;
             
-            debugger;
             visited = Array.from(Array(10), () => new Array(10).fill(false));
             this.visit(1, 1, 2, visited);
             this.visit(1, 3, 2, visited);
@@ -197,11 +197,11 @@ window.addEventListener("DOMContentLoaded", () => {
             
             visited[row][col] = true;
 
-            if ((player == 1 && row % 2 == 1) || (player == 2 && row % 2 == 1)) {
+            if ((player == 1 && row % 2 == 1)) {
                 if (col < 8) this.visit(row, col + 2, player, visited);
                 if (col > 2) this.visit(row, col - 2, player, visited);
             }
-            else {
+            else if (player == 2 && col % 2 == 1) {
                 if (row < 8) this.visit(row + 2, col, player, visited);
                 if (row > 2) this.visit(row - 2, col, player, visited);
             }
