@@ -46,13 +46,18 @@ async function login() {
         body: JSON.stringify(request)
     });
 
-    sessionStorage.setItem("currentUsername", usernameEl.value)
+    if (response.ok) {
+        sessionStorage.setItem("currentUsername", usernameEl.value)
 
-    bootstrap.Modal.getInstance('#login').hide();
+        bootstrap.Modal.getInstance('#login').hide();
 
-    await fillData();
-    await randomWord();
-    await fillData();
+        await fillData();
+        await randomWord();
+        await fillData();
+    } else {
+        const body = await response.json();
+        document.querySelector("#loginError").innerHTML = `⚠ Error: ${body.msg}`;
+    }
 };
 
 async function register() {
@@ -70,13 +75,18 @@ async function register() {
         body: JSON.stringify(request)
     });
 
-    sessionStorage.setItem("currentUsername", usernameEl.value)
+    if (response.ok) {
+        sessionStorage.setItem("currentUsername", usernameEl.value)
 
-    bootstrap.Modal.getInstance('#register').hide();
+        bootstrap.Modal.getInstance('#register').hide();
 
-    await fillData();
-    await randomWord();
-    await fillData();
+        await fillData();
+        await randomWord();
+        await fillData();
+    } else {
+        const body = await response.json();
+        document.querySelector("#regError").innerHTML = `⚠ Error: ${body.msg}`;
+    }
 }
 
 
