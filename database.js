@@ -28,6 +28,10 @@ async function getUser(username) {
     return userCollection.findOne({username: username});
 }
 
+function getUserByToken(token) {
+    return userCollection.findOne({ token: token });
+  }
+
 async function addGroup(group) {
     const result = await groupCollection.insertOne(group);
     return result;
@@ -64,4 +68,4 @@ async function getProjects(username) {
 
 
 
-module.exports = { addUser, getUser, addGroup, getGroups, addTask, getTasks, addProject, getProjects };
+module.exports = { addUser, getUser, getUserByToken, addGroup, getGroups, addTask, getTasks, addProject, getProjects };

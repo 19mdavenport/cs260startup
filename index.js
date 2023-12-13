@@ -21,7 +21,7 @@ apiRouter.post('/user', async (req, res) => {
     res.status(409).send({ msg: 'Existing user' });
     return;
   }
-  const passwordHash = await bcrypt.hash(req.body.password, 10);
+  const passwordHash = await bcrypt.hash(req.body.password + "very salty salt", 10);
   const username = req.body.username;
   let user = {
     username: username,
@@ -63,7 +63,7 @@ apiRouter.post('/session', async (req, res) => {
   const user = await DB.getUser(req.body.username);
 
   if (user) {
-    if (await bcrypt.compare(req.body.password, user.password)) {
+    if (await bcrypt.compare(req.body.password + "very salty salt", user.password)) {
       setAuthCookie(res, user.token);
       res.send({ id: user._id });
       return;
@@ -73,93 +73,53 @@ apiRouter.post('/session', async (req, res) => {
 });
 
 
+// secureApiRouter verifies credentials for endpoints
+var secureApiRouter = express.Router();
+apiRouter.use(secureApiRouter);
 
-apiRouter.put('/group/:username', (req, res) => {
-  if (!req.params.username) {
-    res.sendStatus(400);
-    return;
+secureApiRouter.use(async (req, res, next) => {
+  authToken = req.cookies[authCookieName];
+  const user = await DB.getUserByToken(authToken);
+  if (user) {
+    req.user = user;
+    next();
+  } else {
+    res.status(401).send({ msg: 'Unauthorized' });
   }
-  let user = DB.getUser(req.params.username);
-  if (user.length == 0) {
-    res.sendStatus(401);
-    return;
-  }
-  DB.addGroup({ name: req.body.name, user: req.params.username });
+});
+
+
+
+secureApiRouter.put('/group', (req, res) => {
+  DB.addGroup({ name: req.body.name, user: req.user.username });
   res.sendStatus(200);
 });
 
-apiRouter.get('/group/:username', async (req, res) => {
-  if (!req.params.username) {
-    res.sendStatus(400);
-    return;
-  }
-  let user = DB.getUser(req.params.username);
-  if (user.length == 0) {
-    res.sendStatus(401);
-    return;
-  }
-  res.send(await DB.getGroups(req.params.username));
+secureApiRouter.get('/group', async (req, res) => {
+  res.send(await DB.getGroups(req.user.username));
 });
 
 
 
 
-apiRouter.put('/task/:username', (req, res) => {
-  if (!req.params.username) {
-    res.sendStatus(400);
-    return;
-  }
-  let user = DB.getUser(req.params.username);
-  if (user.length == 0) {
-    res.sendStatus(401);
-    return;
-  }
-  DB.addTask({ group: req.body.group, name: req.body.name, due: req.body.due, user: req.params.username });
+secureApiRouter.put('/task', (req, res) => {
+  DB.addTask({ group: req.body.group, name: req.body.name, due: req.body.due, user: req.user.username });
   res.sendStatus(200);
 });
 
-apiRouter.get('/task/:username', async (req, res) => {
-  if (!req.params.username) {
-    res.sendStatus(400);
-    return;
-  }
-  let user = DB.getUser(req.params.username);
-  if (user.length == 0) {
-    res.sendStatus(401);
-    return;
-  }
-
-  res.send(await DB.getTasks(req.params.username));
+secureApiRouter.get('/task', async (req, res) => {
+  res.send(await DB.getTasks(req.user.username));
 });
 
 
 
-apiRouter.put('/project/:username', (req, res) => {
-  if (!req.params.username) {
-    res.sendStatus(400);
-    return;
-  }
-  let user = DB.getUser(req.params.username);
-  if (user.length == 0) {
-    res.sendStatus(401);
-    return;
-  }
-  DB.addTask({ group: req.body.group, name: req.body.name, hours: req.body.hours, due: req.body.due, user: req.params.username });
+secureApiRouter.put('/project', (req, res) => {
+  DB.addTask({ group: req.body.group, name: req.body.name, hours: req.body.hours, due: req.body.due, user: req.user.username });
   res.sendStatus(200);
 });
 
-apiRouter.get('/project/:username', async (req, res) => {
-  if (!req.params.username) {
-    res.sendStatus(400);
-    return;
-  }
-  let user = DB.getUser(req.params.username);
-  if (user.length == 0) {
-    res.sendStatus(401);
-    return;
-  }
-
-  res.send(await DB.getProjects(req.params.username));
+secureApiRouter.get('/project', async (req, res) => {
+  res.send(await DB.getProjects(req.user.username));
 });
 
 

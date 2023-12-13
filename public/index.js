@@ -99,7 +99,7 @@ async function randomWord() {
 
     const request = { group: 2, name: wordOfDay[0], due: new Date(Date.now() + Math.floor(Math.random() * 897654321)) };
 
-    const response = await fetch(`/api/task/${username}`, {
+    const response = await fetch(`/api/task`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -114,13 +114,13 @@ async function fillData() {
 
     document.querySelector("#usernameSettings").innerHTML = username;
 
-    const classesResponse = await fetch(`/api/group/${username}`);
+    const classesResponse = await fetch(`/api/group`);
     const classes = await classesResponse.json();
 
-    const assignmentsResponse = await fetch(`/api/task/${username}`);
+    const assignmentsResponse = await fetch(`/api/task`);
     const assignments = await assignmentsResponse.json();
 
-    const projectsResponse = await fetch(`/api/project/${username}`);
+    const projectsResponse = await fetch(`/api/project`);
     const largeAssignments = await projectsResponse.json();
 
     assignments.sort((a, b) => new Date(a.due) - new Date(b.due));
