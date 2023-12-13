@@ -85,3 +85,12 @@ For this deliverable I stored the users(still cleartext passwords), classes, ass
 - **MongoDB Atlas database created** - done!
 - **Endpoints for data** - My stubbed out endpoints now process the data and send it to Mongo.
 - **Stores data in MongoDB** - done!
+
+## Login deliverable
+
+For this deliverable I did many things to secure the login functionality that already existed.
+
+- **User registration** - Already existed, but now salts and hashes the password.
+- **existing user** - Already existed, but now salts and hashes the password.
+- **Use MongoDB to store credentials** - Updated my already existing database
+- **Restricts functionality** - You cannot do much of anything before logging in. Attempting to login with invalid credentials or reregister an exist user now rejects. Backend API calls now require authentication tokens.
