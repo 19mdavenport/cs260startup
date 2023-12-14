@@ -92,8 +92,8 @@ window.addEventListener("DOMContentLoaded", () => {
         anchorOffsetY: 0,
         playedSticks: [],
         game: [],
+        gameId: 0,
         start: function () {
-            this.game = Array.from(Array(10), () => new Array(10).fill(0));
             this.canvas.width = this.canvas.offsetWidth;
             this.canvas.height = this.canvas.offsetHeight;
             this.context = this.canvas.getContext("2d");
@@ -110,106 +110,46 @@ window.addEventListener("DOMContentLoaded", () => {
                 myGameArea.y = e.offsetY;
             });
             this.canvas.addEventListener('mousedown', function (e) {
-                if (myGameArea.isMouseHover && !myGameArea.game[myGamePiece.row][myGamePiece.col]) {
-                    myGameArea.playedSticks.push(new component(myGamePiece.width, myGamePiece.height, "rgb(60, 60, 255)", myGamePiece.x, myGamePiece.y));
-                    myGameArea.game[myGamePiece.row][myGamePiece.col] = 1;
-                    let over = myGameArea.gameOver();
-                    if (over) {
-                        alert("You win!");
-                        myGameArea.restartGame();
-                    }
-                    while (true) {
-                        let row = Math.ceil(Math.random() * 10);
-                        let col = Math.ceil(Math.random() * 10);
-                        if ((row + col) % 2 == 0 && row > 0 && row < 10 && col > 0 && col < 10 && !myGameArea.game[row][col]) {
-                            let oppPiece;
-                            if (row % 2 == 0) {
-                                oppPiece = new component(
-                                    myGameArea.size * 11,
-                                    myGameArea.size,
-                                    "rgb(255, 60, 60)",
-                                    (col - 1) / 2 * myGameArea.size * 12 + myGameArea.anchorOffsetX + myGameArea.size,
-                                    (row - 1) / 2 * myGameArea.size * 12 + myGameArea.size * 6 + myGameArea.anchorOffsetY);
-                            }
-                            else {
-                                oppPiece = new component(
-                                    myGameArea.size,
-                                    myGameArea.size * 11,
-                                    "rgb(255, 60, 60)",
-                                    (col - 1) / 2 * myGameArea.size * 12 + myGameArea.size * 6 + myGameArea.anchorOffsetX,
-                                    (row - 1) / 2 * myGameArea.size * 12 + myGameArea.anchorOffsetY + myGameArea.size);
-                            }
-                            oppPiece.row = row;
-                            oppPiece.col = col;
-                            oppPiece.draw();
-                            myGameArea.game[row][col] = 2;
-                            myGameArea.playedSticks.push(oppPiece);
-                            let over = myGameArea.gameOver();
-                            if (over) {
-                                alert("You lose!");
-                                myGameArea.restartGame();
-                            }
-                            break;
-                        }
-                    }
-                }
+                let col = Math.floor((myGameArea.x - myGameArea.anchorOffsetX + myGameArea.size * 3) / (myGameArea.size * 6));
+                let row = Math.floor((myGameArea.y - myGameArea.anchorOffsetY + myGameArea.size * 3) / (myGameArea.size * 6));
+
             });
-            this.setUpAnchors();
         },
-        restartGame: function() {
+        configureWebSocket: function () {
+            const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
+            this.socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
+            this.socket.onopen = (event) => {
+                this.socket.send(JSON.stringify({ type: "join" }));
+            };
+            this.socket.onmessage = async (event) => {
+                debugger;
+                const msg = JSON.parse(event.data);
+                if (msg.type === "load") {
+                    this.game = msg.game;
+                    if (this.gameId === 0) {
+                        this.gameId = msg.gameId;
+                        startGame();
+                    }
+
+                    this.loadGame();
+                } else if (msg.type === GameStartEvent) {
+                    this.displayMsg('player', msg.from, `started a new game`);
+                }
+            };
+        },
+        loadGame: function () {
             clearInterval(this.interval);
-            this.game = Array.from(Array(10), () => new Array(10).fill(0));
-            this.playedSticks = [];
-            this.context.clearRect(0,0,this.canvas.width, this.canvas.height);
+            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
             this.setUpAnchors();
-            
+
+            for (let row = 0; i < 10; i++) {
+                for (let col = 0; j < 10; j++) {
+
+                }
+            }
+
             this.interval = setInterval(updateGameArea, 20);
-        },
-        gameOver: function () {
-            debugger;
-            let visited = Array.from(Array(10), () => new Array(10).fill(false));
-            this.visit(1, 1, 1, visited);
-            this.visit(3, 1, 1, visited);
-            this.visit(5, 1, 1, visited);
-            this.visit(7, 1, 1, visited);
-            this.visit(9, 1, 1, visited);
-
-            if (visited[1][9] || visited[3][9] || visited[5][9] || visited[7][9] || visited[9][9]) return 1;
-            
-            visited = Array.from(Array(10), () => new Array(10).fill(false));
-            this.visit(1, 1, 2, visited);
-            this.visit(1, 3, 2, visited);
-            this.visit(1, 5, 2, visited);
-            this.visit(1, 7, 2, visited);
-            this.visit(1, 9, 2, visited);
-
-
-            if (visited[9][1] || visited[9][3] || visited[9][5] || visited[9][7] || visited[9][9]) return 2;
-
-            return 0;
-
-        },
-        visit: function (row, col, player, visited) {
-            if (row > 9 || row < 1 || col > 9 || col < 1) return;
-            if(visited[row][col]) return;
-            if (this.game[row][col] != player) return;
-            
-            visited[row][col] = true;
-
-            if ((player == 1 && row % 2 == 1)) {
-                if (col < 8) this.visit(row, col + 2, player, visited);
-                if (col > 2) this.visit(row, col - 2, player, visited);
-            }
-            else if (player == 2 && col % 2 == 1) {
-                if (row < 8) this.visit(row + 2, col, player, visited);
-                if (row > 2) this.visit(row - 2, col, player, visited);
-            }
-            if (col < 9 && row < 9) this.visit(row + 1, col + 1, player, visited);
-            if (col < 9 && row > 1) this.visit(row + 1, col - 1, player, visited);
-            if (col > 1 && row < 9) this.visit(row - 1, col + 1, player, visited);
-            if (col > 1 && row > 1) this.visit(row - 1, col - 1, player, visited);
-
         },
         setUpAnchors: function () {
             let spaceAvailable = Math.floor(Math.min(this.canvas.height, this.canvas.width) / 5);
@@ -280,10 +220,9 @@ window.addEventListener("DOMContentLoaded", () => {
         }
         myGameArea.setUpAnchors();
 
-
-
     }
 
-    startGame();
+    myGameArea.configureWebSocket();
+
 
 });

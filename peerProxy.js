@@ -24,6 +24,7 @@ function peerProxy(httpServer) {
 
     // Forward messages to everyone except the sender
     ws.on('message', function message(data) {
+      console.log(data);
       let msg = JSON.parse(data);
       if (msg.type === "join") {
         if (waiting === null) {
@@ -32,23 +33,23 @@ function peerProxy(httpServer) {
         else {
           let opponent = waiting;
           waiting = null;
-          let game = {playerOne: opponent, playerTwo: connection, id: nextId, game: Array.from(Array(10), () => new Array(10).fill(0))};
+          let game = { playerOne: opponent, playerTwo: connection, id: nextId, game: Array.from(Array(10), () => new Array(10).fill(0)) };
           games[nextId] = game;
           nextId++;
-          let loadGame = {game: game.game, id: game.id, type: "load"};
+          let loadGame = { game: game.game, id: game.id, type: "load" };
           let loadGameMessage = JSON.stringify(loadGame);
           ws.send(loadGameMessage);
           opponent.ws.send(loadGameMessage);
         }
       }
       else if (msg.type === "claim") {
-        if(!msg.row || !msg.col || !msg.gameId) {
-          ws.send(JSON.parse({message:"Error: bad input", type: "error"}));
+        if (!msg.row || !msg.col || !msg.gameId) {
+          ws.send(JSON.parse({ message: "Error: bad input", type: "error" }));
           return;
         }
         let game = games[msg.gameId];
         if (game.game[msg.row][msg.col] != 0) {
-          ws.send(JSON.parse({message:"Error: spot already taken", type: "error"}));
+          ws.send(JSON.parse({ message: "Error: spot already taken", type: "error" }));
           return;
         }
         if (game.playerOne === connection) {
@@ -57,22 +58,22 @@ function peerProxy(httpServer) {
         else if (game.playerOne === connection) {
           game.game[msg.row][msg.col] = 2;
         }
-        
+
         let over = gameOver(game.game);
         if (over === 0) {
-          let loadGame = {game: game.game, id: game.id, type: "load"};
+          let loadGame = { game: game.game, id: game.id, type: "load" };
           let loadGameMessage = JSON.stringify(loadGame);
           playerOne.ws.send(loadGameMessage);
           playerTwo.ws.send(loadGameMessage);
         }
         else {
           if (over === 1) {
-            playerOne.ws.send(JSON.stringify({message: "You win!", type: "game over"}));
-            playerTwo.ws.send(JSON.stringify({message: "You lose", type: "game over"}));
+            playerOne.ws.send(JSON.stringify({ message: "You win!", type: "game over" }));
+            playerTwo.ws.send(JSON.stringify({ message: "You lose", type: "game over" }));
           }
           else if (over === 1) {
-            playerTwo.ws.send(JSON.stringify({message: "You win!", type: "game over"}));
-            playerOne.ws.send(JSON.stringify({message: "You lose", type: "game over"}));
+            playerTwo.ws.send(JSON.stringify({ message: "You win!", type: "game over" }));
+            playerOne.ws.send(JSON.stringify({ message: "You lose", type: "game over" }));
           }
           games[msg.gameId] = null;
         }
@@ -81,16 +82,19 @@ function peerProxy(httpServer) {
 
     // Remove the closed connection so we don't try to forward anymore
     ws.on('close', () => {
-      games.forEach((game) => {
+      for (const gameId in games) {
+        let game = games[gameId];
         if (game.playerOne === connection) {
-          playerTwo.ws.send(JSON.stringify({message: "Opponent concedes. You win!", type: "game over"}));
-          games[game.id] = null;
+          game.playerTwo.ws.send(JSON.stringify({ message: "Opponent concedes. You win!", type: "game over" }));
+          game.playerTwo.ws.terminate();
+          games[gameId] = null;
         }
         if (game.playerTwo === connection) {
-          playerOne.ws.send(JSON.stringify({message: "Opponent concedes. You win!", type: "game over"}));
-          games[game.id] = null;
+          game.playerOne.ws.send(JSON.stringify({ message: "Opponent concedes. You win!", type: "game over" }));
+          game.playerOne.ws.terminate();
+          games[gameId] = null;
         }
-      });
+      }
     });
 
     // Respond to pong messages by marking the connection alive
@@ -99,21 +103,31 @@ function peerProxy(httpServer) {
     });
   });
 
+  function checkAlive(c) {
+    if (!c.alive) {
+      c.ws.terminate();
+    } else {
+      c.alive = false;
+      c.ws.ping();
+    }
+  }
+
   // Keep active connections alive
   setInterval(() => {
-    connections.forEach((c) => {
+    for (const gameId in games) {
       // Kill any connection that didn't respond to the ping last time
-      if (!c.alive) {
-        c.ws.terminate();
-      } else {
-        c.alive = false;
-        c.ws.ping();
+      if (games[gameId] != null) {
+        checkAlive(games[gameId].playerOne);
+        checkAlive(games[gameId].playerTwo);
       }
-    });
+    }
+    if (waiting != null) {
+      checkAlive(waiting);
+    }
   }, 10000);
 }
 
-function gameOver(game, ) {
+function gameOver(game,) {
   debugger;
   let visited = Array.from(Array(10), () => new Array(10).fill(false));
   visit(1, 1, 1, visited, game);
@@ -123,7 +137,7 @@ function gameOver(game, ) {
   visit(9, 1, 1, visited, game);
 
   if (visited[1][9] || visited[3][9] || visited[5][9] || visited[7][9] || visited[9][9]) return 1;
-  
+
   visited = Array.from(Array(10), () => new Array(10).fill(false));
   visit(1, 1, 2, visited, game);
   visit(1, 3, 2, visited, game);
@@ -139,18 +153,18 @@ function gameOver(game, ) {
 
 function visit(row, col, player, visited, game) {
   if (row > 9 || row < 1 || col > 9 || col < 1) return;
-  if(visited[row][col]) return;
+  if (visited[row][col]) return;
   if (game[row][col] != player) return;
-  
+
   visited[row][col] = true;
 
   if ((player == 1 && row % 2 == 1)) {
-      if (col < 8) visit(row, col + 2, player, visited, game);
-      if (col > 2) visit(row, col - 2, player, visited, game);
+    if (col < 8) visit(row, col + 2, player, visited, game);
+    if (col > 2) visit(row, col - 2, player, visited, game);
   }
   else if (player == 2 && col % 2 == 1) {
-      if (row < 8) visit(row + 2, col, player, visited, game);
-      if (row > 2) visit(row - 2, col, player, visited, game);
+    if (row < 8) visit(row + 2, col, player, visited, game);
+    if (row > 2) visit(row - 2, col, player, visited, game);
   }
   if (col < 9 && row < 9) visit(row + 1, col + 1, player, visited, game);
   if (col < 9 && row > 1) visit(row + 1, col - 1, player, visited, game);

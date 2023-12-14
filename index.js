@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const express = require('express');
 const app = express();
 const DB = require('./database.js');
+const { peerProxy } = require('./peerProxy.js');
 
 const authCookieName = 'token';
 
@@ -125,7 +126,7 @@ secureApiRouter.get('/project', async (req, res) => {
 
 
 
-app.listen(port, () => {
+const httpService = app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
 
@@ -137,3 +138,5 @@ function setAuthCookie(res, authToken) {
     sameSite: 'strict',
   });
 }
+
+peerProxy(httpService);
