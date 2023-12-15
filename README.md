@@ -94,3 +94,12 @@ For this deliverable I did many things to secure the login functionality that al
 - **existing user** - Already existed, but now salts and hashes the password.
 - **Use MongoDB to store credentials** - Updated my already existing database
 - **Restricts functionality** - You cannot do much of anything before logging in. Attempting to login with invalid credentials or reregister an exist user now rejects. Backend API calls now require authentication tokens.
+
+## WebSocket deliverable
+
+For this deliverable I used webSocket to make the stick game multiplayer.
+
+- **Backend listens for WebSocket connection** - done!
+- **Frontend makes WebSocket connection** - done!
+- **Data sent over WebSocket connection** - done!
+- **WebSocket data displayed** - Game moves display in realtime. Half sorry to the TA grading this, you may have to pull up two different clients(Incognito mode works) for this
