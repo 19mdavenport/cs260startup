@@ -93,6 +93,8 @@ window.addEventListener("DOMContentLoaded", () => {
         playedSticks: [],
         game: [],
         gameId: 0,
+        player: 0,
+        turn: 0,
         start: function () {
             this.canvas.width = this.canvas.offsetWidth;
             this.canvas.height = this.canvas.offsetHeight;
@@ -112,7 +114,14 @@ window.addEventListener("DOMContentLoaded", () => {
             this.canvas.addEventListener('mousedown', function (e) {
                 let col = Math.floor((myGameArea.x - myGameArea.anchorOffsetX + myGameArea.size * 3) / (myGameArea.size * 6));
                 let row = Math.floor((myGameArea.y - myGameArea.anchorOffsetY + myGameArea.size * 3) / (myGameArea.size * 6));
-
+                if (myGameArea.player === 2) {
+                    let temp = row;
+                    row = col;
+                    col = temp;
+                }
+                if (myGameArea.turn == myGameArea.player && (row + col) % 2 == 0 && row > 0 && row < 10 && col > 0 && col < 10 && !myGameArea.game[row][col]) {
+                    myGameArea.socket.send(JSON.stringify({row: row, col: col, gameId: myGameArea.gameId, type: "claim"}));
+                }
             });
         },
         configureWebSocket: function () {
@@ -122,18 +131,24 @@ window.addEventListener("DOMContentLoaded", () => {
                 this.socket.send(JSON.stringify({ type: "join" }));
             };
             this.socket.onmessage = async (event) => {
-                debugger;
                 const msg = JSON.parse(event.data);
                 if (msg.type === "load") {
                     this.game = msg.game;
+                    this.turn = msg.turn;
                     if (this.gameId === 0) {
                         this.gameId = msg.gameId;
+                        this.player = msg.player;
                         startGame();
                     }
 
                     this.loadGame();
-                } else if (msg.type === GameStartEvent) {
-                    this.displayMsg('player', msg.from, `started a new game`);
+                }
+                else if(msg.type === "game over") {
+                    alert(msg.message);
+                    this.turn = 0;
+                }
+                else {
+                    console.log(msg);
                 }
             };
         },
@@ -143,9 +158,61 @@ window.addEventListener("DOMContentLoaded", () => {
 
             this.setUpAnchors();
 
-            for (let row = 0; i < 10; i++) {
-                for (let col = 0; j < 10; j++) {
-
+            for (let i = 0; i < 10; i++) {
+                for (let j = 0; j < 10; j++) {
+                    let row;
+                    let col;
+                    if (this.player == 1) {
+                        row = i;
+                        col = j;
+                    }
+                    else {
+                        row = j;
+                        col = i;
+                    }
+                    if ((row + col) % 2 == 0 && row > 0 && row < 10 && col > 0 && col < 10 && this.game[i][j]) {
+                        let curPiece;
+                        if(this.game[i][j] === this.player) {
+                            if (row % 2 == 1) {
+                                curPiece = new component(
+                                    myGameArea.size * 11,
+                                    myGameArea.size,
+                                    "rgb(60, 60, 255)",
+                                    (col - 1) / 2 * myGameArea.size * 12 + myGameArea.anchorOffsetX + myGameArea.size,
+                                    (row - 1) / 2 * myGameArea.size * 12 + myGameArea.size * 6 + myGameArea.anchorOffsetY);
+                            }
+                            else {
+                                curPiece = new component(
+                                    myGameArea.size,
+                                    myGameArea.size * 11,
+                                    "rgb(60, 60, 255)",
+                                    (col - 1) / 2 * myGameArea.size * 12 + myGameArea.size * 6 + myGameArea.anchorOffsetX,
+                                    (row - 1) / 2 * myGameArea.size * 12 + myGameArea.anchorOffsetY + myGameArea.size);
+                            }
+                        }
+                        else {
+                            if (row % 2 == 0) {
+                                curPiece = new component(
+                                    myGameArea.size * 11,
+                                    myGameArea.size,
+                                    "rgb(255, 60, 60)",
+                                    (col - 1) / 2 * myGameArea.size * 12 + myGameArea.anchorOffsetX + myGameArea.size,
+                                    (row - 1) / 2 * myGameArea.size * 12 + myGameArea.size * 6 + myGameArea.anchorOffsetY);
+                            }
+                            else {
+                                curPiece = new component(
+                                    myGameArea.size,
+                                    myGameArea.size * 11,
+                                    "rgb(255, 60, 60)",
+                                    (col - 1) / 2 * myGameArea.size * 12 + myGameArea.size * 6 + myGameArea.anchorOffsetX,
+                                    (row - 1) / 2 * myGameArea.size * 12 + myGameArea.anchorOffsetY + myGameArea.size);
+                            }
+                        }
+                        curPiece.row = row;
+                        curPiece.col = col;
+                        curPiece.draw();
+                        myGameArea.playedSticks.push(curPiece);
+                    }
                 }
             }
 

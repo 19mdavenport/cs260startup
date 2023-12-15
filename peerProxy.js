@@ -24,8 +24,8 @@ function peerProxy(httpServer) {
 
     // Forward messages to everyone except the sender
     ws.on('message', function message(data) {
-      console.log(data);
       let msg = JSON.parse(data);
+      console.log(msg);
       if (msg.type === "join") {
         if (waiting === null) {
           waiting = connection;
@@ -33,47 +33,54 @@ function peerProxy(httpServer) {
         else {
           let opponent = waiting;
           waiting = null;
-          let game = { playerOne: opponent, playerTwo: connection, id: nextId, game: Array.from(Array(10), () => new Array(10).fill(0)) };
+          let game = { playerOne: opponent, playerTwo: connection, id: nextId, turn: 1, game: Array.from(Array(10), () => new Array(10).fill(0)) };
           games[nextId] = game;
           nextId++;
-          let loadGame = { game: game.game, id: game.id, type: "load" };
-          let loadGameMessage = JSON.stringify(loadGame);
-          ws.send(loadGameMessage);
-          opponent.ws.send(loadGameMessage);
+          ws.send(JSON.stringify({ game: game.game, gameId: game.id, player: 2, turn: 1, type: "load" }));
+          opponent.ws.send(JSON.stringify({ game: game.game, gameId: game.id, player: 1, turn: 1, type: "load" }));
         }
       }
       else if (msg.type === "claim") {
         if (!msg.row || !msg.col || !msg.gameId) {
-          ws.send(JSON.parse({ message: "Error: bad input", type: "error" }));
+          ws.send(JSON.stringify({ message: "Error: bad input", type: "error" }));
           return;
         }
         let game = games[msg.gameId];
-        if (game.game[msg.row][msg.col] != 0) {
-          ws.send(JSON.parse({ message: "Error: spot already taken", type: "error" }));
+        if(!game) {
+          ws.send(JSON.stringify({ message: "Error: bad input", type: "error" }));
           return;
         }
-        if (game.playerOne === connection) {
+        if (game.game[msg.row][msg.col] != 0) {
+          ws.send(JSON.stringify({ message: "Error: spot already taken", type: "error" }));
+          return;
+        }
+        if (game.playerOne === connection && game.turn === 1) {
           game.game[msg.row][msg.col] = 1;
         }
-        else if (game.playerOne === connection) {
+        else if (game.playerTwo === connection && game.turn === 2) {
           game.game[msg.row][msg.col] = 2;
+        }
+        else {
+          ws.send(JSON.stringify({ message: "Error: bad input", type: "error" }));
+          return;
         }
 
         let over = gameOver(game.game);
-        if (over === 0) {
-          let loadGame = { game: game.game, id: game.id, type: "load" };
-          let loadGameMessage = JSON.stringify(loadGame);
-          playerOne.ws.send(loadGameMessage);
-          playerTwo.ws.send(loadGameMessage);
-        }
-        else {
+
+        game.turn = (game.turn === 1) ? 2 : 1;
+        let loadGame = { game: game.game, id: game.id, turn: game.turn, type: "load" };
+        let loadGameMessage = JSON.stringify(loadGame);
+        game.playerOne.ws.send(loadGameMessage);
+        game.playerTwo.ws.send(loadGameMessage);
+
+        if (over) {
           if (over === 1) {
-            playerOne.ws.send(JSON.stringify({ message: "You win!", type: "game over" }));
-            playerTwo.ws.send(JSON.stringify({ message: "You lose", type: "game over" }));
+            game.playerOne.ws.send(JSON.stringify({ message: "You win!", type: "game over" }));
+            game.playerTwo.ws.send(JSON.stringify({ message: "You lose", type: "game over" }));
           }
-          else if (over === 1) {
-            playerTwo.ws.send(JSON.stringify({ message: "You win!", type: "game over" }));
-            playerOne.ws.send(JSON.stringify({ message: "You lose", type: "game over" }));
+          else if (over === 2) {
+            game.playerTwo.ws.send(JSON.stringify({ message: "You win!", type: "game over" }));
+            game.playerOne.ws.send(JSON.stringify({ message: "You lose", type: "game over" }));
           }
           games[msg.gameId] = null;
         }
@@ -84,15 +91,17 @@ function peerProxy(httpServer) {
     ws.on('close', () => {
       for (const gameId in games) {
         let game = games[gameId];
-        if (game.playerOne === connection) {
-          game.playerTwo.ws.send(JSON.stringify({ message: "Opponent concedes. You win!", type: "game over" }));
-          game.playerTwo.ws.terminate();
-          games[gameId] = null;
-        }
-        if (game.playerTwo === connection) {
-          game.playerOne.ws.send(JSON.stringify({ message: "Opponent concedes. You win!", type: "game over" }));
-          game.playerOne.ws.terminate();
-          games[gameId] = null;
+        if (game != null) {
+          if (game.playerOne === connection) {
+            game.playerTwo.ws.send(JSON.stringify({ message: "Opponent concedes. You win!", type: "game over" }));
+            game.playerTwo.ws.terminate();
+            games[gameId] = null;
+          }
+          if (game.playerTwo === connection) {
+            game.playerOne.ws.send(JSON.stringify({ message: "Opponent concedes. You win!", type: "game over" }));
+            game.playerOne.ws.terminate();
+            games[gameId] = null;
+          }
         }
       }
     });
@@ -128,7 +137,6 @@ function peerProxy(httpServer) {
 }
 
 function gameOver(game,) {
-  debugger;
   let visited = Array.from(Array(10), () => new Array(10).fill(false));
   visit(1, 1, 1, visited, game);
   visit(3, 1, 1, visited, game);
