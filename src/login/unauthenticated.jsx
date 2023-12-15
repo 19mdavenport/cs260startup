@@ -9,23 +9,23 @@ export function Unauthenticated(props) {
   const [displayError, setDisplayError] = React.useState(null);
 
   async function loginUser() {
-    loginOrCreate(`/api/auth/login`);
+    loginOrCreate(`/api/session`);
   }
 
   async function createUser() {
-    loginOrCreate(`/api/auth/create`);
+    loginOrCreate(`/api/user`);
   }
 
   async function loginOrCreate(endpoint) {
     const response = await fetch(endpoint, {
       method: 'post',
-      body: JSON.stringify({email: userName, password: password}),
+      body: JSON.stringify({username: userName, password: password, email: "none"}),
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
       },
     });
     if (response?.status === 200) {
-      localStorage.setItem('userName', userName);
+      localStorage.setItem('currentUsername', userName);
       props.onLogin(userName);
     } else {
       const body = await response.json();

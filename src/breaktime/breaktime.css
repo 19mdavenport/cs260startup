@@ -1,0 +1,11 @@
+#game-window {
+    height: 600px; 
+    border:1px solid white;
+    max-width:1000px;
+}
+
+#game-canvas {
+    box-sizing:border-box; 
+    height:100%; 
+    width:100%;
+}

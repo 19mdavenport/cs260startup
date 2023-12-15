@@ -1,12 +1,12 @@
 import React from 'react';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { Login } from './login/login';
-import { Play } from './play/play';
-import { Scores } from './scores/scores';
-import { About } from './about/about';
+import { Productivity } from './productivity/productivity';
+import { Breaktime } from './breaktime/breaktime';
 import { AuthState } from './login/authState';
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 import './app.css';
+import './custom.scss';
 
 function App() {
   const [userName, setUserName] = React.useState(localStorage.getItem('userName') || '');
@@ -18,9 +18,10 @@ function App() {
       <div className='body bg-dark text-light'>
         <header className='container-fluid'>
           <nav className='navbar fixed-top navbar-dark'>
-            <div className='navbar-brand'>
-              Simon<sup>&reg;</sup>
-            </div>
+            <a className="navbar-brand" href="#">
+              <img src="Logo.png" height={25} />
+              <span className="navbar-text">Productivity Manager</span>
+            </a>
             <menu className='navbar-nav'>
               <li className='nav-item'>
                 <NavLink className='nav-link' to=''>
@@ -29,23 +30,18 @@ function App() {
               </li>
               {authState === AuthState.Authenticated && (
                 <li className='nav-item'>
-                  <NavLink className='nav-link' to='play'>
-                    Play
+                  <NavLink className='nav-link' to='productivity'>
+                    Productivity
                   </NavLink>
                 </li>
               )}
               {authState === AuthState.Authenticated && (
                 <li className='nav-item'>
-                  <NavLink className='nav-link' to='scores'>
-                    Scores
+                  <NavLink className='nav-link' to='breaktime'>
+                    Breaktime
                   </NavLink>
                 </li>
               )}
-              <li className='nav-item'>
-                <NavLink className='nav-link' to='about'>
-                  About
-                </NavLink>
-              </li>
             </menu>
           </nav>
         </header>
@@ -65,18 +61,16 @@ function App() {
             }
             exact
           />
-          <Route path='/play' element={<Play userName={userName} />} />
-          <Route path='/scores' element={<Scores />} />
-          <Route path='/about' element={<About />} />
+          <Route path='/productivity' element={<Productivity userName={userName} />} />
+          <Route path='/breaktime' element={<Breaktime />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
 
-        <footer className='bg-dark text-dark text-muted'>
-          <div className='container-fluid'>
-            <span className='text-reset'>Author Name(s)</span>
-            <a className='text-reset' href='https://github.com/webprogramming260/simon-react'>
-              Source
-            </a>
+        <footer className="m-3">
+          <hr />
+          <div className="d-flex justify-content-between">
+            <span className="text-reset">Michael Davenport</span>
+            <a href="https://github.com/19mdavenport/cs260startup">GitHub</a>
           </div>
         </footer>
       </div>
