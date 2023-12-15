@@ -103,3 +103,12 @@ For this deliverable I used webSocket to make the stick game multiplayer.
 - **Frontend makes WebSocket connection** - done!
 - **Data sent over WebSocket connection** - done!
 - **WebSocket data displayed** - Game moves display in realtime. Half sorry to the TA grading this, you may have to pull up two different clients(Incognito mode works) for this
+
+## React deliverable
+
+For this deliverable I converted the application over to use React. It doesn't look pretty, but we have React.
+
+- **Bundled and transpiled** - done!
+- **Components** - Login, productivity lists, stick game are all components.
+- **Router** - Routing between components.
+- **Hooks** - Productivity uses useState hooks to asyncronously get data from the server

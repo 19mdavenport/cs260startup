@@ -37,7 +37,6 @@ export function Stickgame() {
                 myGameArea.y = e.offsetY;
             });
             this.canvas.addEventListener('mousedown', function (e) {
-                debugger;
                 let col = Math.floor((myGameArea.x - myGameArea.anchorOffsetX + myGameArea.size * 3) / (myGameArea.size * 6));
                 let row = Math.floor((myGameArea.y - myGameArea.anchorOffsetY + myGameArea.size * 3) / (myGameArea.size * 6));
                 if (myGameArea.player === 2) {
